@@ -26,6 +26,7 @@ class Model {
 
     }
 
+    //Funcao que armazena os dados recebidos em um array
     public function setData($data = array()) {
 
         foreach ($data as $key => $value) {
