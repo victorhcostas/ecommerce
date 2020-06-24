@@ -15,7 +15,7 @@ class Model {
         switch ($method) {
 
             case "get":
-                return $this->values[$fieldName];
+                return (isset($this->values[$fieldName])) ? $this->values[$fieldName] : NULL;
             break;
 
             case "set":
@@ -29,11 +29,15 @@ class Model {
     //Funcao que armazena os dados recebidos em um array
     public function setData($data = array()) {
 
+
+        
         foreach ($data as $key => $value) {
-            //usa-se as chaves para passar uma variavel dinamica
+            //usa-se as chaves para passar uma variavel dinamic  
+
             $this->{"set" . $key}($value);
 
         }
+        
 
     }
 
