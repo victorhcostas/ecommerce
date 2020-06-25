@@ -10,6 +10,7 @@ $app = new Slim();
 $app->config('debug', true);
 
 //Importa as rotas da aplicacao
+require_once("functions.php");
 require_once("site.php");
 require_once("admin.php");
 require_once("admin-users.php");

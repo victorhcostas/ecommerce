@@ -57,8 +57,6 @@ $app->get("/admin/products/:idproduct", function($idproduct) { //Exibe a tela de
         'product'=>$product->getValues()
     ]);
 
-    exit;
-
 });
 
 $app->post("/admin/products/:idproduct", function($idproduct) { //Edita o cadastro de um produto
