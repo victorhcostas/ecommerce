@@ -34,6 +34,7 @@ class Category extends Model {
 
     }
 
+    //Retorna os dados da categoria
     public function get($idcategory) {
 
         $sql = new Sql();
@@ -46,6 +47,7 @@ class Category extends Model {
 
     }
 
+    //Deleta uma categoria
     public function delete() {
 
         $sql = new Sql();
@@ -58,6 +60,7 @@ class Category extends Model {
 
     }
 
+    //Adiciona dinamicamente ao menu do site as categorias adicionadas ao banco de dados
     public static function updateFile() {
 
         $categories = Category::listAll();
@@ -69,6 +72,65 @@ class Category extends Model {
         }
 
         file_put_contents($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "views" . DIRECTORY_SEPARATOR . "categories-menu.html", implode('', $html));
+
+    }
+
+    //Retorna os produtos relacionados a uma referida categoria
+    public function getProducts($related = true) {
+
+        $sql = new Sql();
+
+        if ($related === true) {
+
+            return $sql->select("
+                SELECT * FROM tb_products WHERE idproduct IN (
+                    SELECT a.idproduct
+                    FROM  tb_products a
+                    INNER JOIN tb_productscategories b ON a.idproduct = b.idproduct
+                    WHERE b.idcategory = :idcategory
+                );
+            ", [
+               ':idcategory'=>$this->getidcategory()
+            ]);
+
+        } else {
+
+            return $sql->select("
+                SELECT * FROM tb_products WHERE idproduct NOT IN (
+                    SELECT a.idproduct
+                    FROM  tb_products a
+                    INNER JOIN tb_productscategories b ON a.idproduct = b.idproduct
+                    WHERE b.idcategory = :idcategory
+                );
+            ", [
+                ':idcategory'=>$this->getidcategory()
+            ]);
+
+        }
+
+    }
+
+    //Adiciona um produto a categoria especificada
+    public function addProduct(Product $product) {
+
+        $sql = new Sql();
+
+        $sql->query("INSERT INTO tb_productscategories (idcategory, idproduct) VALUES (:idcategory, :idproduct)", [
+            ':idcategory'=>$this->getidcategory(),
+            ':idproduct'=>$product->getidproduct()
+        ]);
+
+    }
+
+    //Remove um produto da categoria especificada
+    public function removeProduct(Product $product) {
+
+        $sql = new Sql();
+
+        $sql->query("DELETE FROM tb_productscategories WHERE idcategory = :idcategory AND idproduct = :idproduct", [
+            ':idcategory'=>$this->getidcategory(),
+            ':idproduct'=>$product->getidproduct()
+        ]);
 
     }
 
