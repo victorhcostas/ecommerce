@@ -154,6 +154,7 @@ class Product extends Model {
 
     }
 
+    //Retorna informacoes de um produto por meio de sua URL
     public function getFromURL($desurl) {
 
         $sql = new Sql();
@@ -166,6 +167,7 @@ class Product extends Model {
 
     }
 
+    //Retorna as categorias as quais um produto pertence
     public function getCategories() {
 
         $sql = new Sql();

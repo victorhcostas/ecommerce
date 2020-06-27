@@ -12,6 +12,59 @@ class User extends Model {
     const SECRET = "HcodePhp7_Secret";
     const SECRET_IV = "HcodePhp7_Secret_IV";
 
+    //Verifica se a sessao do usuario ainda esta ativa mesmo se ele sair so site
+    public static function getFromSession() {
+
+        $user = new User();
+
+        if (isset($_SESSION[User::SESSION]) && (int)$_SESSION[User::SESSION]['iduser'] > 0) {
+        
+            $user->setData($_SESSION[User::SESSION]);
+
+        }
+
+        return $user;
+        
+    }
+
+    //Verifica se o usuario esta e logado e se eh admin
+    public static function checkLogin($inadmin = true) {
+
+        if (
+            !isset($_SESSION[User::SESSION])
+            ||
+            !$_SESSION[User::SESSION]
+            ||
+            !(int)$_SESSION[User::SESSION]["iduser"] > 0
+        ) {
+
+            //Nao esta logado
+            return false;
+
+        } else {
+
+            if ($inadmin === true && (bool)$_SESSION[User::SESSION]['inadmin'] === true) {
+
+                //Esta logado e eh admin
+                return true;
+
+            } else if ($inadmin === false) {
+
+                //Esta logado mas n eh admin
+                return true;
+
+            } else {
+
+                //Nao esta logado
+                return false;
+
+            }
+
+        }
+
+    }
+
+    //Realiza o login do usuario comparando o input com o banco de dados
     public static function login ($login, $password) {
 
         $sql = new Sql();
@@ -49,17 +102,11 @@ class User extends Model {
     //Verifica o login do usuario
     public static function verifyLogin($inadmin = true) {
 
-        if (
-            !isset($_SESSION[User::SESSION])
-            ||
-            !$_SESSION[User::SESSION]
-            ||
-            !(int)$_SESSION[User::SESSION]["iduser"] > 0
-            ||
-            (bool)$_SESSION[User::SESSION]["inadmin"] !== $inadmin
-        ) {
+        if (User::checkLogin($inadmin)) {
+
             header("Location: /admin/login");
             exit;
+
         }
 
     }

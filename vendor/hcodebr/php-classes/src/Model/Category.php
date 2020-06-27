@@ -132,7 +132,7 @@ class Category extends Model {
 
         return [
             'data'=>Product::checkList($results),
-            'total'=>(int)$resultTotal[0]["nrtotal"],
+            'total'=>(int)$resultTotal[0]["nrtotal"], 
             'pages'=>ceil($resultTotal[0]["nrtotal"] / $itemsPerPage) //A funcao ceil arredonda numeros inteiros para cima
         ];
 
