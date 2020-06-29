@@ -27,7 +27,7 @@ class User extends Model {
         
     }
 
-    //Verifica se o usuario esta e logado e se eh admin
+    //Verifica se o usuario esta logado e se eh admin
     public static function checkLogin($inadmin = true) {
 
         if (
@@ -102,7 +102,7 @@ class User extends Model {
     //Verifica o login do usuario
     public static function verifyLogin($inadmin = true) {
 
-        if (User::checkLogin($inadmin)) {
+        if (!User::checkLogin($inadmin)) {
 
             header("Location: /admin/login");
             exit;

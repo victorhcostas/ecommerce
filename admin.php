@@ -4,7 +4,7 @@ use \Hcode\PageAdmin;
 use \Hcode\Model\User;
 use \Hcode\Mailer;
 
-$app->get('/admin', function() {
+$app->get('/admin', function() { //Exibe a pagina do admin
 
 	User::verifyLogin();
 	
@@ -22,9 +22,10 @@ $app->get('/admin/login', function() { //pagina de login
 		]);
 		
 		$page->setTpl("login");
+
 });
 	
-$app->post('/admin/login', function() { //exibe a pagina do admin se ele for autenticado
+$app->post('/admin/login', function() { //Faz a autenticacao do login e encaminha para a pagina do admin, se estiver correto
 		
 	User::login($_POST["login"], $_POST["password"]);
 		
