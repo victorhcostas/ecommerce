@@ -69,12 +69,13 @@ $app->get("/cart", function() { //Exibe a pagina do carrinho de compras
 
 	$page->setTpl("cart", [
 		'cart'=>$cart->getValues(),
-		'products'=>$cart->getProducts()
+		'products'=>$cart->getProducts(),
+		'error'=>Cart::getMsgError()
 	]);
 
 });
 
-$app->get("/cart/:idproduct/add", function($idproduct) {
+$app->get("/cart/:idproduct/add", function($idproduct) { //Adiciona um produto ao carrinho de compras
 
 	$product = new Product();
 
@@ -82,22 +83,20 @@ $app->get("/cart/:idproduct/add", function($idproduct) {
 
 	$cart = Cart::getFromSession();
 
-	$qtd = (isset($_GET['qtd'])) ? (int)$_GET['qtd'] : 0;
+	$qtd = (isset($_GET['qtd'])) ? (int)$_GET['qtd'] : 1;
 
-	for ($i = 1; $i < $qtd; $i++) {
+	for ($i = 0; $i < $qtd; $i++) {
 
 		$cart->addProduct($product);
 
 	}
-
-	$cart->addProduct($product);
 
 	header("Location: /cart");
 	exit;
 
 });
 
-$app->get("/cart/:idproduct/minus", function($idproduct) {
+$app->get("/cart/:idproduct/minus", function($idproduct) { //Remove 1 unidade de um produto do carrinho de compras
 
 	$product = new Product();
 
@@ -112,7 +111,7 @@ $app->get("/cart/:idproduct/minus", function($idproduct) {
 
 });
 
-$app->get("/cart/:idproduct/remove", function($idproduct) {
+$app->get("/cart/:idproduct/remove", function($idproduct) { //Remove todos as unidades de um certo produto no carrinho
 
 	$product = new Product();
 
@@ -121,6 +120,17 @@ $app->get("/cart/:idproduct/remove", function($idproduct) {
 	$cart = Cart::getFromSession();
 
 	$cart->removeProduct($product, true);
+
+	header("Location: /cart");
+	exit;
+
+});
+
+$app->post("/cart/freight", function() {
+
+	$cart = Cart::getFromSession();
+
+	$cart->setFreight($_POST['zipcode']);
 
 	header("Location: /cart");
 	exit;
