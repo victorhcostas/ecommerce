@@ -78,7 +78,6 @@ $app->get("/admin/forgot/sent", function() { //Rota que exibe a confirmacao do e
 $app->get("/admin/forgot/reset", function() { //Rota que exibe o campo de restauracao da senha
 
 	$user = User::validForgotDecrypt($_GET["code"]);
-	//var_dump($user);
 
 	$page = new PageAdmin ([
 		"header"=>false,

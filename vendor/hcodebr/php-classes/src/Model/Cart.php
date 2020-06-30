@@ -172,6 +172,7 @@ class Cart extends Model {
 
     }
 
+    //Retorna os valores totais dos produtos (preco, dimensoes, peso, quantidade, etc)
     public function getProductsTotals() {
 
         $sql = new Sql();
@@ -194,6 +195,7 @@ class Cart extends Model {
 
     }
 
+    //Calcula o frete utilizando o servidor dos Correios
     public function setFreight($nrzipcode) {
 
         $nrzipcode = str_replace('-', '', $nrzipcode);
@@ -249,6 +251,7 @@ class Cart extends Model {
 
     }
 
+    //Formata os valores numericos no banco de dados para o padrao ingles
     public static function formatValueToDecimal($value):float {
 
         $value = str_replace('.', '', $value);
@@ -256,12 +259,14 @@ class Cart extends Model {
 
     }
 
+    //Recebe a mensagem de erro
     public static function setMsgError($msg) {
 
         $_SESSION[Cart::SESSION_ERROR] = $msg;
 
     }
 
+    //Retorna a mensagem de erro
     public static function getMsgError() {
 
         $msg = (isset($_SESSION[Cart::SESSION_ERROR])) ? $_SESSION[Cart::SESSION_ERROR] : "";
@@ -272,12 +277,14 @@ class Cart extends Model {
 
     }
 
+    //Limpa a mensagem de erro
     public static function clearMsgError() {
 
         $_SESSION[Cart::SESSION_ERROR] = NULL;
 
     }
 
+    //Atualiza o calculo do frete
     public function updateFreight() {
 
         if ($this->getdeszipcode() != '') {
@@ -288,6 +295,7 @@ class Cart extends Model {
 
     }
 
+    //Incrementa ao getValues() o calculo dos totais e do frete
     public function getValues() {
 
         $this->getCalculateTotal();
@@ -296,6 +304,7 @@ class Cart extends Model {
 
     }
 
+    //Calcula os valores totais de total e subtotal, alem do frete
     public function getCalculateTotal(){
 
         $this->updateFreight();

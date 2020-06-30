@@ -11,6 +11,8 @@ class User extends Model {
     const SESSION = "User";
     const SECRET = "HcodePhp7_Secret";
     const SECRET_IV = "HcodePhp7_Secret_IV";
+    const ERROR = "UserError";
+    const ERROR_REGISTER = "UserErrorRegister";
 
     //Verifica se a sessao do usuario ainda esta ativa mesmo se ele sair so site
     public static function getFromSession() {
@@ -69,7 +71,8 @@ class User extends Model {
 
         $sql = new Sql();
 
-        $results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :LOGIN", array(
+        $results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b ON a.idperson = b.idperson
+        WHERE deslogin = :LOGIN", array(
             ":LOGIN"=>$login
         ));
 
@@ -104,10 +107,15 @@ class User extends Model {
 
         if (!User::checkLogin($inadmin)) {
 
-            header("Location: /admin/login");
+            if($inadmin) {
+                header("Location: /admin/login");
+
+            } else {
+                header("Location: /login");
+            }
             exit;
 
-        }
+        }   
 
     }
 
@@ -247,6 +255,7 @@ class User extends Model {
 
     }
 
+    //Recebe o id da sessao de recuperacao de senha, o decodifica, compara e o valida, verifica se e seguro este usuario recuperar a senha
     public static function validForgotDecrypt($code) {
 
         $code = base64_decode($code);
@@ -283,6 +292,7 @@ class User extends Model {
 
     }
 
+    //Insere a data de recuperacao da senha no banco de dados
     public static function setForgotUsed($idrecovery) {
 
         $sql = new Sql();
@@ -293,6 +303,7 @@ class User extends Model {
 
     }
 
+    //Insere a nova senha recuperada no banco de dados
     public function setPassword($password) {
 
         $sql = new Sql();
@@ -301,6 +312,38 @@ class User extends Model {
             ":password"=>$password,
             ":iduser"=>$this->getiduser()
         ));
+
+    }
+
+    //Atribui a mensagem de erro a uma variavel
+    public static function setError($msg) {
+
+        $_SESSION[User::ERROR] = $msg;
+
+    }
+
+    //Retorna a mensagem de erro
+    public static function getError() {
+
+        $msg = (isset($_SESSION[User::ERROR]) && $_SESSION[User::ERROR]) ? $_SESSION[User::ERROR] : '';
+
+        User::clearError();
+
+        return $msg;
+
+    }
+
+    //Limpa a mensagem de erro
+    public static function clearError() {
+
+        $_SESSION[User::ERROR] = NULL;
+
+    }
+
+    //Atribui a mensagem de erro no registro
+    public static function setErrorRegister($msg) {
+
+        $_SESSION[User::ERROR_REGISTER] = $msg;
 
     }
 
