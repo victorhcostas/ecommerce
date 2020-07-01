@@ -6,6 +6,7 @@ use \Hcode\Model\Category;
 use \Hcode\Model\Cart;
 use \Hcode\Model\User;
 use \Hcode\Model\Address;
+use \Hcode\Mailer;
 
 $app->get('/', function() {
 
@@ -252,6 +253,64 @@ $app->post("/register", function() {
 
 	header('Location: /checkout');
 	exit;
+
+});
+
+$app->get("/forgot", function() { //Rota que renderiza a pagina que recupera a senha do usuario
+
+	$page = new Page();
+
+	$page->setTpl("forgot");
+
+});
+
+$app->post("/forgot", function() { //Rota que faz a recuperacao da senha do usuario
+
+	$user = User::getForgot($_POST["email"], false);
+	
+	header("Location: /forgot/sent");
+	exit;
+
+});
+
+$app->get("/forgot/sent", function() { //Rota que exibe a confirmacao do envio do email de recuperacao de email
+
+	$page = new Page();
+
+	$page->setTpl("forgot-sent");
+
+});
+
+$app->get("/forgot/reset", function() { //Rota que exibe o campo de restauracao da senha
+
+	$user = User::validForgotDecrypt($_GET["code"]);
+
+	$page = new Page ();
+
+	$page->setTpl("forgot-reset", array(
+		"name"=>$user["desperson"],
+		"code"=>$_GET["code"]
+	));
+
+});
+
+$app->post("/forgot/reset", function() { //Restaura a senha do usuario mantendo um hash no banco de dados
+
+	$forgot = User::validForgotDecrypt($_POST["code"]);
+
+	User::setForgotUsed($forgot["idrecovery"]);
+
+	$user = new User();
+
+	$user->get((int)$forgot["iduser"]);
+
+	$password = User::getPasswordHash($_POST["password"]);
+
+	$user->setPassword($password);
+
+	$page = new Page ();
+
+	$page->setTpl("forgot-reset-success");
 
 });
 
