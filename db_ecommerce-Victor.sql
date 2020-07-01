@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 29-Jun-2020 às 16:29
+-- Generation Time: 01-Jul-2020 às 21:31
 -- Versão do servidor: 10.1.38-MariaDB
 -- versão do PHP: 7.3.2
 
@@ -26,6 +26,35 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_addresses_save` (`pidaddress` INT(11), `pidperson` INT(11), `pdesaddress` VARCHAR(128), `pdescomplement` VARCHAR(32), `pdescity` VARCHAR(32), `pdesstate` VARCHAR(32), `pdescountry` VARCHAR(32), `pdeszipcode` CHAR(8), `pdesdistrict` VARCHAR(32))  BEGIN
+
+	IF pidaddress > 0 THEN
+		
+		UPDATE tb_addresses
+        SET
+			idperson = pidperson,
+            desaddress = pdesaddress,
+            descomplement = pdescomplement,
+            descity = pdescity,
+            desstate = pdesstate,
+            descountry = pdescountry,
+            deszipcode = pdeszipcode, 
+            desdistrict = pdesdistrict
+		WHERE idaddress = pidaddress;
+        
+    ELSE
+		
+		INSERT INTO tb_addresses (idperson, desaddress, descomplement, descity, desstate, descountry, deszipcode, desdistrict)
+        VALUES(pidperson, pdesaddress, pdescomplement, pdescity, pdesstate, pdescountry, pdeszipcode, pdesdistrict);
+        
+        SET pidaddress = LAST_INSERT_ID();
+        
+    END IF;
+    
+    SELECT * FROM tb_addresses WHERE idaddress = pidaddress;
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_carts_save` (`pidcart` INT, `pdessessionid` VARCHAR(64), `piduser` INT, `pdeszipcode` CHAR(8), `pvlfreight` DECIMAL(10,2), `pnrdays` INT)  BEGIN
 
     IF pidcart > 0 THEN
@@ -69,6 +98,38 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_categories_save` (`pidcategory` 
     END IF;
     
     SELECT * FROM tb_categories WHERE idcategory = pidcategory;
+    
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_orders_save` (`pidorder` INT, `pidcart` INT(11), `piduser` INT(11), `pidstatus` INT(11), `pidaddress` INT(11), `pvltotal` DECIMAL(10,2))  BEGIN
+	
+	IF pidorder > 0 THEN
+		
+		UPDATE tb_orders
+        SET
+			idcart = pidcart,
+            iduser = piduser,
+            idstatus = pidstatus,
+            idaddress = pidaddress,
+            vltotal = pvltotal
+		WHERE idorder = pidorder;
+        
+    ELSE
+    
+		INSERT INTO tb_orders (idcart, iduser, idstatus, idaddress, vltotal)
+        VALUES(pidcart, piduser, pidstatus, pidaddress, pvltotal);
+		
+		SET pidorder = LAST_INSERT_ID();
+        
+    END IF;
+    
+    SELECT * 
+    FROM tb_orders a
+    INNER JOIN tb_ordersstatus b USING(idstatus)
+    INNER JOIN tb_carts c USING(idcart)
+    INNER JOIN tb_users d ON d.iduser = a.iduser
+    INNER JOIN tb_addresses e USING(idaddress)
+    WHERE idorder = pidorder;
     
 END$$
 
@@ -181,9 +242,28 @@ CREATE TABLE `tb_addresses` (
   `descity` varchar(32) NOT NULL,
   `desstate` varchar(32) NOT NULL,
   `descountry` varchar(32) NOT NULL,
-  `nrzipcode` int(11) NOT NULL,
+  `deszipcode` char(8) NOT NULL,
+  `desdistrict` varchar(32) NOT NULL,
   `dtregister` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `tb_addresses`
+--
+
+INSERT INTO `tb_addresses` (`idaddress`, `idperson`, `desaddress`, `descomplement`, `descity`, `desstate`, `descountry`, `deszipcode`, `desdistrict`, `dtregister`) VALUES
+(1, 1, 'Rua OdÃ­lio Olinto de Almeida', 'Ao lado do Cemiterio Velho', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 16:35:56'),
+(2, 1, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:23:01'),
+(3, 1, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:34:57'),
+(4, 21, 'Rua OdÃ­lio Olinto de Almeida', 'Aqui do lado', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:38:41'),
+(5, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:43:35'),
+(6, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:43:57'),
+(7, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:45:45'),
+(8, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:51:37'),
+(9, 15, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:01:03'),
+(10, 15, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:13:27'),
+(11, 21, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:28:02'),
+(12, 21, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:28:49');
 
 -- --------------------------------------------------------
 
@@ -207,7 +287,11 @@ CREATE TABLE `tb_carts` (
 
 INSERT INTO `tb_carts` (`idcart`, `dessessionid`, `iduser`, `deszipcode`, `vlfreight`, `nrdays`, `dtregister`) VALUES
 (1, 'tttb1h64728lrp3en0h53j6946', 1, NULL, NULL, NULL, '2020-06-27 13:44:41'),
-(2, 'vg7bmtfc3ke7c97jmr6ea9cpl6', NULL, NULL, NULL, NULL, '2020-06-29 11:04:54');
+(2, 'vg7bmtfc3ke7c97jmr6ea9cpl6', NULL, '75400480', '120.02', 8, '2020-06-29 11:04:54'),
+(3, '5q3sfefta7g8c3e8iq1g9uftia', NULL, '75400480', '0.00', 0, '2020-06-29 17:07:41'),
+(4, 'mot4s34pdbq6mffqdilmvkp89s', NULL, '75400480', '188.40', 8, '2020-06-30 11:21:22'),
+(5, 'g8m37ovp53f7abft25n1ed059u', NULL, '75400480', '223.12', 8, '2020-07-01 10:40:26'),
+(6, 'ehe24292kvor8sl7vpvjoils90', NULL, '74610130', '120.02', 4, '2020-07-01 10:41:38');
 
 -- --------------------------------------------------------
 
@@ -228,70 +312,57 @@ CREATE TABLE `tb_cartsproducts` (
 --
 
 INSERT INTO `tb_cartsproducts` (`idcartproduct`, `idcart`, `idproduct`, `dtremoved`, `dtregister`) VALUES
-(1, 2, 1, '0000-00-00 00:00:00', '2020-06-29 13:14:40'),
-(2, 2, 1, '0000-00-00 00:00:00', '2020-06-29 13:22:28'),
-(3, 2, 1, '0000-00-00 00:00:00', '2020-06-29 13:22:36'),
-(4, 2, 1, '0000-00-00 00:00:00', '2020-06-29 13:25:27'),
-(5, 2, 4, '2020-06-29 10:41:06', '2020-06-29 13:29:45'),
-(6, 2, 1, '2020-06-29 10:41:45', '2020-06-29 13:41:35'),
-(7, 2, 3, '2020-06-29 10:53:29', '2020-06-29 13:51:43'),
-(8, 2, 3, '2020-06-29 10:53:31', '2020-06-29 13:53:11'),
-(9, 2, 3, '2020-06-29 10:53:33', '2020-06-29 13:53:14'),
-(10, 2, 4, '2020-06-29 10:53:51', '2020-06-29 13:53:48'),
-(11, 2, 1, '2020-06-29 11:00:43', '2020-06-29 14:00:35'),
-(12, 2, 1, '2020-06-29 11:00:43', '2020-06-29 14:00:35'),
-(13, 2, 1, '2020-06-29 11:00:44', '2020-06-29 14:00:35'),
-(14, 2, 1, '2020-06-29 11:00:53', '2020-06-29 14:00:35'),
-(15, 2, 3, '2020-06-29 11:02:58', '2020-06-29 14:01:05'),
-(16, 2, 3, '2020-06-29 11:02:58', '2020-06-29 14:01:05'),
-(17, 2, 3, '2020-06-29 11:02:58', '2020-06-29 14:01:05'),
-(18, 2, 3, '2020-06-29 11:02:58', '2020-06-29 14:01:05'),
-(19, 2, 1, '2020-06-29 11:02:57', '2020-06-29 14:02:15'),
-(20, 2, 1, '2020-06-29 11:02:57', '2020-06-29 14:02:15'),
-(21, 2, 1, '2020-06-29 11:12:06', '2020-06-29 14:03:50'),
-(22, 2, 1, '2020-06-29 11:12:07', '2020-06-29 14:11:52'),
-(23, 2, 1, '2020-06-29 11:12:22', '2020-06-29 14:12:18'),
-(24, 2, 1, '2020-06-29 11:12:54', '2020-06-29 14:12:30'),
-(25, 2, 3, '2020-06-29 11:12:56', '2020-06-29 14:12:35'),
-(26, 2, 3, '2020-06-29 11:12:56', '2020-06-29 14:12:42'),
-(27, 2, 1, '2020-06-29 11:13:14', '2020-06-29 14:13:03'),
-(28, 2, 3, '2020-06-29 11:13:16', '2020-06-29 14:13:03'),
-(29, 2, 3, '2020-06-29 11:13:16', '2020-06-29 14:13:08'),
-(30, 2, 3, '2020-06-29 11:13:46', '2020-06-29 14:13:44'),
-(31, 2, 3, '2020-06-29 11:13:57', '2020-06-29 14:13:55'),
-(32, 2, 3, '2020-06-29 11:14:05', '2020-06-29 14:14:02'),
-(33, 2, 3, '2020-06-29 11:14:29', '2020-06-29 14:14:18'),
-(34, 2, 3, '2020-06-29 11:14:29', '2020-06-29 14:14:18'),
-(35, 2, 3, '2020-06-29 11:14:43', '2020-06-29 14:14:38'),
-(36, 2, 3, '2020-06-29 11:14:43', '2020-06-29 14:14:38'),
-(37, 2, 3, '2020-06-29 11:15:22', '2020-06-29 14:14:52'),
-(38, 2, 3, '2020-06-29 11:15:22', '2020-06-29 14:14:52'),
-(39, 2, 3, '2020-06-29 11:15:22', '2020-06-29 14:14:52'),
-(40, 2, 3, '2020-06-29 11:18:22', '2020-06-29 14:15:28'),
-(41, 2, 1, '2020-06-29 11:18:21', '2020-06-29 14:15:36'),
-(42, 2, 3, '2020-06-29 11:18:22', '2020-06-29 14:15:45'),
-(43, 2, 3, '2020-06-29 11:18:22', '2020-06-29 14:15:45'),
-(44, 2, 3, '2020-06-29 11:18:22', '2020-06-29 14:15:45'),
-(45, 2, 3, '2020-06-29 11:18:22', '2020-06-29 14:15:45'),
-(46, 2, 3, '2020-06-29 11:18:22', '2020-06-29 14:15:52'),
-(47, 2, 3, '2020-06-29 11:18:22', '2020-06-29 14:16:11'),
-(48, 2, 3, '2020-06-29 11:18:22', '2020-06-29 14:16:11'),
-(49, 2, 3, '2020-06-29 11:18:22', '2020-06-29 14:16:11'),
-(50, 2, 3, '2020-06-29 11:18:37', '2020-06-29 14:18:30'),
-(51, 2, 3, '2020-06-29 11:18:37', '2020-06-29 14:18:30'),
-(52, 2, 3, '2020-06-29 11:19:30', '2020-06-29 14:18:40'),
-(53, 2, 3, '2020-06-29 11:19:30', '2020-06-29 14:19:00'),
-(54, 2, 3, '2020-06-29 11:19:30', '2020-06-29 14:19:00'),
-(55, 2, 3, '2020-06-29 11:19:30', '2020-06-29 14:19:00'),
-(56, 2, 3, '2020-06-29 11:24:50', '2020-06-29 14:19:35'),
-(57, 2, 3, '2020-06-29 11:24:50', '2020-06-29 14:19:47'),
-(58, 2, 3, '2020-06-29 11:24:50', '2020-06-29 14:19:56'),
-(59, 2, 3, '2020-06-29 11:24:50', '2020-06-29 14:19:56'),
-(60, 2, 3, '2020-06-29 11:24:50', '2020-06-29 14:19:56'),
-(61, 2, 1, '2020-06-29 11:26:19', '2020-06-29 14:25:23'),
-(62, 2, 1, '2020-06-29 11:26:19', '2020-06-29 14:25:23'),
-(63, 2, 1, '2020-06-29 11:26:19', '2020-06-29 14:25:23'),
-(64, 2, 1, '2020-06-29 11:26:19', '2020-06-29 14:25:27');
+(1, 2, 1, '2020-06-29 13:24:00', '2020-06-29 16:20:52'),
+(2, 2, 1, '2020-06-29 14:11:38', '2020-06-29 16:24:09'),
+(3, 2, 2, '2020-06-29 13:25:07', '2020-06-29 16:24:50'),
+(4, 2, 3, '2020-06-29 13:25:51', '2020-06-29 16:25:16'),
+(5, 2, 3, '2020-06-29 13:25:51', '2020-06-29 16:25:20'),
+(6, 3, 1, '2020-06-29 15:07:08', '2020-06-29 17:07:54'),
+(7, 2, 1, '2020-06-29 15:43:56', '2020-06-29 18:06:44'),
+(8, 2, 1, '2020-06-29 16:28:44', '2020-06-29 18:40:54'),
+(9, 2, 1, '2020-06-29 16:28:44', '2020-06-29 18:43:31'),
+(10, 3, 4, '2020-06-29 15:45:28', '2020-06-29 18:44:36'),
+(11, 3, 4, '2020-06-29 15:45:30', '2020-06-29 18:44:56'),
+(12, 3, 3, '2020-06-29 15:47:08', '2020-06-29 18:45:38'),
+(13, 3, 1, '2020-06-29 15:47:55', '2020-06-29 18:47:12'),
+(14, 3, 1, '2020-06-29 15:47:55', '2020-06-29 18:47:20'),
+(15, 3, 2, '2020-06-29 15:48:13', '2020-06-29 18:47:52'),
+(16, 3, 13, '2020-06-29 16:07:20', '2020-06-29 18:48:11'),
+(17, 3, 1, '2020-06-29 15:55:26', '2020-06-29 18:48:26'),
+(18, 3, 1, '2020-06-29 15:58:26', '2020-06-29 18:48:40'),
+(19, 3, 1, '2020-06-29 15:58:51', '2020-06-29 18:58:21'),
+(20, 3, 1, '2020-06-29 16:07:19', '2020-06-29 18:58:49'),
+(21, 3, 1, '2020-06-29 16:07:19', '2020-06-29 19:03:05'),
+(22, 3, 1, '2020-06-29 16:11:29', '2020-06-29 19:10:21'),
+(23, 3, 1, '2020-06-29 16:21:59', '2020-06-29 19:11:03'),
+(24, 3, 1, '2020-06-29 16:23:06', '2020-06-29 19:21:50'),
+(25, 3, 1, '2020-06-29 16:23:06', '2020-06-29 19:22:01'),
+(26, 3, 1, '2020-06-29 16:23:06', '2020-06-29 19:22:03'),
+(27, 3, 3, '2020-06-29 16:24:14', '2020-06-29 19:23:32'),
+(28, 3, 1, '2020-06-29 16:26:07', '2020-06-29 19:24:18'),
+(29, 3, 13, '2020-06-29 16:26:09', '2020-06-29 19:25:25'),
+(30, 3, 12, '2020-06-29 16:26:11', '2020-06-29 19:25:29'),
+(31, 3, 9, '2020-06-29 16:26:13', '2020-06-29 19:25:37'),
+(32, 3, 2, '2020-06-29 16:28:24', '2020-06-29 19:25:44'),
+(33, 3, 2, NULL, '2020-06-29 19:28:33'),
+(34, 2, 2, '2020-06-29 16:29:02', '2020-06-29 19:28:48'),
+(35, 2, 2, '2020-06-29 16:29:02', '2020-06-29 19:28:59'),
+(36, 2, 7, '2020-06-29 16:30:18', '2020-06-29 19:29:05'),
+(37, 2, 2, '2020-06-29 16:31:58', '2020-06-29 19:30:23'),
+(38, 2, 2, '2020-06-29 16:33:06', '2020-06-29 19:31:45'),
+(39, 2, 2, '2020-06-29 16:33:06', '2020-06-29 19:32:55'),
+(40, 2, 1, NULL, '2020-06-29 19:33:11'),
+(41, 4, 1, NULL, '2020-06-30 11:23:03'),
+(42, 4, 1, NULL, '2020-06-30 11:23:14'),
+(43, 5, 1, '2020-07-01 11:15:17', '2020-07-01 10:43:10'),
+(44, 6, 1, '2020-07-01 16:22:42', '2020-07-01 10:45:57'),
+(45, 6, 1, '2020-07-01 16:22:42', '2020-07-01 10:53:22'),
+(46, 5, 1, '2020-07-01 15:34:39', '2020-07-01 14:03:36'),
+(47, 5, 3, '2020-07-01 11:16:22', '2020-07-01 14:13:32'),
+(48, 5, 3, NULL, '2020-07-01 14:16:02'),
+(49, 5, 1, NULL, '2020-07-01 18:34:35'),
+(50, 6, 1, '2020-07-01 16:23:24', '2020-07-01 19:23:03'),
+(51, 6, 1, NULL, '2020-07-01 19:24:54');
 
 -- --------------------------------------------------------
 
@@ -327,6 +398,7 @@ CREATE TABLE `tb_orders` (
   `idcart` int(11) NOT NULL,
   `iduser` int(11) NOT NULL,
   `idstatus` int(11) NOT NULL,
+  `idaddress` int(11) NOT NULL,
   `vltotal` decimal(10,2) NOT NULL,
   `dtregister` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -375,7 +447,11 @@ INSERT INTO `tb_persons` (`idperson`, `desperson`, `desemail`, `nrphone`, `dtreg
 (1, 'JoÃ£o Rangel', 'admin@hcode.com.br', 2147483647, '2017-03-01 03:00:00'),
 (11, 'Vitao Teste', 'vhcsteste02@gmail.com', 62988997766, '2020-06-23 12:45:40'),
 (13, 'Lucas Sidnei', 'nerosidnei@gmail.com', 62984887443, '2020-06-24 12:31:01'),
-(14, 'Ttales', 'ttalessoft@gmail.com', 62985881122, '2020-06-24 13:12:14');
+(14, 'Ttales', 'ttalessoft@gmail.com', 62985881122, '2020-06-24 13:12:14'),
+(15, 'BÃ¢tÃ¡tÃ Ã§Ã£o', 'batata21@gmail.com', 62985784994, '2020-06-30 15:50:15'),
+(16, 'Ã‡Ã£oÃ‡Ã£o', 'cao@auau.com', 62988776655, '2020-06-30 16:14:17'),
+(20, 'teste1', 'teste@hotmail.com', 654321, '2020-06-30 18:07:19'),
+(21, 'Jin', 'vhcsteste@gmail.com', 982828484, '2020-07-01 11:00:31');
 
 -- --------------------------------------------------------
 
@@ -401,8 +477,8 @@ CREATE TABLE `tb_products` (
 
 INSERT INTO `tb_products` (`idproduct`, `desproduct`, `vlprice`, `vlwidth`, `vlheight`, `vllength`, `vlweight`, `desurl`, `dtregister`) VALUES
 (1, 'iPhone XR 64GB Branco Tela 6.1â€ iOS 12 4G 12MP - Apple', '3419.05', '7.50', '15.00', '7.50', '0.43', 'iphonexr-64gb', '2017-03-13 03:00:00'),
-(2, 'Smart TV LED Samsung 50\" UHD 4K', '2359.90', '26.10', '72.80', '112.40', '13900.00', 'smarttv-led-4k', '2017-03-13 03:00:00'),
-(3, 'MacBook Pro i5, Tela Retina 13\", Touch Bar, SSD 256, 8GB - Prata', '13899.00', '1.49', '30.41', '21.24', '2620.00', 'notebook-14-4gb-1tb', '2017-03-13 03:00:00'),
+(2, 'Smart TV LED Samsung 50\" UHD 4K', '2359.90', '60.00', '80.00', '20.00', '7.00', 'smarttv-led-4k', '2017-03-13 03:00:00'),
+(3, 'MacBook Pro i5, Tela Retina 13\", Touch Bar, SSD 256, 8GB - Prata', '4000.00', '21.24', '1.49', '30.41', '2.98', 'notebook-14-4gb-1tb', '2017-03-13 03:00:00'),
 (4, 'Ipad 32GB Wi-Fi Tela 9,7\" CÃ¢mera 8MP Prata - Apple', '2499.99', '0.75', '16.95', '24.50', '0.47', 'ipad-32gb', '2020-06-25 11:47:06'),
 (7, 'Smartphone Motorola Moto G5 Plus', '1135.23', '0.70', '15.20', '7.40', '0.16', 'smartphone-motorola-moto-g5-plus', '2020-06-25 17:02:32'),
 (8, 'Smartphone Moto Z Play', '1887.78', '1.16', '14.10', '0.90', '0.13', 'smartphone-moto-z-play', '2020-06-25 17:02:32'),
@@ -471,7 +547,11 @@ INSERT INTO `tb_users` (`iduser`, `idperson`, `deslogin`, `despassword`, `inadmi
 (1, 1, 'admin', '$2y$12$YlooCyNvyTji8bPRcrfNfOKnVMmZA9ViM2A3IpFjmrpIbp5ovNmga', 1, '2017-03-13 03:00:00'),
 (11, 11, 'vhcsteste', '$2y$12$jbrr6HZgLIW5dDZNIL2XaOAFXcCQRwKW40YFdnb78M27L9DoAax8O', 1, '2020-06-23 12:45:40'),
 (13, 13, 'magal', '$2y$12$uSAUGoeYlKcXTNbMrJ0f1uQ3W4ccpvAJdpE8dp3RMs54oAKTr1bVq', 1, '2020-06-24 12:31:01'),
-(14, 14, 'Ttales', '$2y$12$WkMMOeKQWY2LZttNl6DEtuOIW1COdgw8li20pKlkWmHrEp/uDNMtS', 1, '2020-06-24 13:12:14');
+(14, 14, 'Ttales', '$2y$12$WkMMOeKQWY2LZttNl6DEtuOIW1COdgw8li20pKlkWmHrEp/uDNMtS', 1, '2020-06-24 13:12:14'),
+(15, 15, 'batata', '$2y$12$dFznpQIM7dQZ32Vh6aMJm.RVP7y7SSPUTtkyJub1QvXKuyou0Gar6', 1, '2020-06-30 15:50:15'),
+(16, 16, 'cao', '$2y$12$H67riK0mwIdVa8zd.IB0hezCsvkTFJS5TgCFHQyp3w9IN/s4E0Xfi', 1, '2020-06-30 16:14:17'),
+(20, 20, 'teste', '$2y$12$PyFREpq4d3Z.3xWSKLHYK.PsePQ2ZoK349Aa/3zL7aJiA3neS9Y/y', 1, '2020-06-30 18:07:19'),
+(21, 21, 'vhcsteste@gmail.com', '$2y$12$INtASCQSvh573chkt./.7uxYYM/bZkm/zUqmSn.3YSyxiVDKnXgTu', 0, '2020-07-01 11:00:31');
 
 -- --------------------------------------------------------
 
@@ -510,7 +590,8 @@ CREATE TABLE `tb_userspasswordsrecoveries` (
 
 INSERT INTO `tb_userspasswordsrecoveries` (`idrecovery`, `iduser`, `desip`, `dtrecovery`, `dtregister`) VALUES
 (1, 11, '127.0.0.1', '2020-06-24 09:55:09', '2020-06-24 12:54:54'),
-(2, 14, '127.0.0.1', NULL, '2020-06-24 13:13:47');
+(2, 14, '127.0.0.1', NULL, '2020-06-24 13:13:47'),
+(3, 21, '127.0.0.1', '2020-07-01 08:45:14', '2020-07-01 11:44:25');
 
 --
 -- Indexes for dumped tables
@@ -549,9 +630,10 @@ ALTER TABLE `tb_categories`
 --
 ALTER TABLE `tb_orders`
   ADD PRIMARY KEY (`idorder`),
-  ADD KEY `FK_orders_carts_idx` (`idcart`),
   ADD KEY `FK_orders_users_idx` (`iduser`),
-  ADD KEY `fk_orders_ordersstatus_idx` (`idstatus`);
+  ADD KEY `fk_orders_ordersstatus_idx` (`idstatus`),
+  ADD KEY `fk_orders_carts_idx` (`idcart`),
+  ADD KEY `fk_orders_addresses_idx` (`idaddress`);
 
 --
 -- Indexes for table `tb_ordersstatus`
@@ -607,19 +689,19 @@ ALTER TABLE `tb_userspasswordsrecoveries`
 -- AUTO_INCREMENT for table `tb_addresses`
 --
 ALTER TABLE `tb_addresses`
-  MODIFY `idaddress` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idaddress` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `tb_carts`
 --
 ALTER TABLE `tb_carts`
-  MODIFY `idcart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idcart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tb_cartsproducts`
 --
 ALTER TABLE `tb_cartsproducts`
-  MODIFY `idcartproduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `idcartproduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `tb_categories`
@@ -643,7 +725,7 @@ ALTER TABLE `tb_ordersstatus`
 -- AUTO_INCREMENT for table `tb_persons`
 --
 ALTER TABLE `tb_persons`
-  MODIFY `idperson` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `idperson` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `tb_products`
@@ -655,7 +737,7 @@ ALTER TABLE `tb_products`
 -- AUTO_INCREMENT for table `tb_users`
 --
 ALTER TABLE `tb_users`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `tb_userslogs`
@@ -667,7 +749,7 @@ ALTER TABLE `tb_userslogs`
 -- AUTO_INCREMENT for table `tb_userspasswordsrecoveries`
 --
 ALTER TABLE `tb_userspasswordsrecoveries`
-  MODIFY `idrecovery` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idrecovery` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -696,6 +778,7 @@ ALTER TABLE `tb_cartsproducts`
 -- Limitadores para a tabela `tb_orders`
 --
 ALTER TABLE `tb_orders`
+  ADD CONSTRAINT `fk_orders_addresses` FOREIGN KEY (`idaddress`) REFERENCES `tb_addresses` (`idaddress`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_orders_carts` FOREIGN KEY (`idcart`) REFERENCES `tb_carts` (`idcart`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_orders_ordersstatus` FOREIGN KEY (`idstatus`) REFERENCES `tb_ordersstatus` (`idstatus`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `fk_orders_users` FOREIGN KEY (`iduser`) REFERENCES `tb_users` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION;

@@ -6,7 +6,8 @@ use \Hcode\Model\Category;
 use \Hcode\Model\Cart;
 use \Hcode\Model\User;
 use \Hcode\Model\Address;
-use \Hcode\Mailer;
+use \Hcode\Model\Order;
+use \Hcode\Model\OrderStatus;
 
 $app->get('/', function() {
 
@@ -239,7 +240,23 @@ $app->post("/checkout", function() { //Realiza o checkout com verificacao de pre
 
 	$address->save();
 
-	header("Location: /order");
+	$cart = Cart::getFromSession();
+
+	$totals = $cart->getCalculateTotal();
+
+	$order = new Order();
+
+	$order->setData([
+		'idcart'=>$cart->getidcart(),
+		'idaddress'=>$cart->getidaddress(),
+		'iduser'=>$cart->getiduser(),
+		'idstatus'=>OrderStatus::EM_ABERTO,
+		'vltotal'=>$totals['vlprice'] + $cart->getvlfreight()
+	]);
+
+	$order->save();
+
+	header("Location: /order/".$order->getidorder());
 	exit;
 
 });
@@ -401,7 +418,7 @@ $app->post("/forgot/reset", function() { //Restaura a senha do usuario mantendo 
 
 });
 
-$app->get("/profile", function() {
+$app->get("/profile", function() { //Exibe a pagina do perfil do usuario
 
 	User::verifyLogin(false);
 
@@ -417,7 +434,7 @@ $app->get("/profile", function() {
 
 });
 
-$app->post("/profile", function() {
+$app->post("/profile", function() { //Verifica e altera os dados do usuario
 
 	User::verifyLogin(false);
 
@@ -462,5 +479,24 @@ $app->post("/profile", function() {
 
 });
 
+$app->get("/order/:idorder", function($idorder) { //Exibe a tela das informacoes do pedido
+
+	User::verifyLogin(false);
+
+	$order = new Order();
+
+	$order->get((int)$idorder);
+
+	$page = new Page();
+
+	$page->setTpl("payment", [
+		'order'=>$order->getValues()
+	]);
+
+});
+
+$app->get("/boleto/:idorder", function($idorder) {
+
+});
 
 ?>
