@@ -145,7 +145,7 @@ class User extends Model {
             array(
             ":desperson"=>$this->getdesperson(),
             ":deslogin"=>$this->getdeslogin(),
-            ":despassword"=>$this->getdespassword(),
+            ":despassword"=>User::getPasswordHash($this->getdespassword()),
             ":desemail"=>$this->getdesemail(),
             ":nrphone"=>$this->getnrphone(),
             ":inadmin"=>$this->getinadmin(),
@@ -199,7 +199,8 @@ class User extends Model {
 
     }
 
-    //Recupera a senha de um usuario
+    //Recupera a senha de um usuario, verificando se o seu email existe no banco de dados e registra seu nome e
+    // seu ip, codificando o seu id de recuperacao e enviando um email com este mesmo id
     public static function getForgot($email) {
 
         $sql = new Sql();
@@ -315,14 +316,36 @@ class User extends Model {
 
     }
 
-    //Atribui a mensagem de erro a uma variavel
+    //Verifica se o login ja existe
+    public static function checkLoginExist($login) {
+
+        $sql = new Sql();
+
+        $results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :deslogin", [
+            'deslogin'=>$login
+        ]);
+
+        return (count($results) > 0);
+
+    }
+
+    //Converte o password recebido em hash
+    public static function getPasswordHash($password) {
+
+        return password_hash($password, PASSWORD_DEFAULT, [
+            'cost'=>12
+        ]);
+
+    }
+
+    //Atribui a mensagem de erro do usuario a uma variavel
     public static function setError($msg) {
 
         $_SESSION[User::ERROR] = $msg;
 
     }
 
-    //Retorna a mensagem de erro
+    //Retorna a mensagem de erro do usuario
     public static function getError() {
 
         $msg = (isset($_SESSION[User::ERROR]) && $_SESSION[User::ERROR]) ? $_SESSION[User::ERROR] : '';
@@ -333,7 +356,7 @@ class User extends Model {
 
     }
 
-    //Limpa a mensagem de erro
+    //Limpa a mensagem de erro do usuario
     public static function clearError() {
 
         $_SESSION[User::ERROR] = NULL;
@@ -346,6 +369,26 @@ class User extends Model {
         $_SESSION[User::ERROR_REGISTER] = $msg;
 
     }
+
+    //Recebe a mensagem de erro no registro
+    public static function getErrorRegister() {
+
+        $msg = (isset($_SESSION[User::ERROR_REGISTER]) && $_SESSION[User::ERROR_REGISTER]) ? $_SESSION[User::ERROR_REGISTER] : '';
+
+        User::clearErrorRegister();
+
+        return $msg;
+
+    }
+
+    //Limpa a mensagem de erro do registro
+    public static function clearErrorRegister() {
+
+        $_SESSION[User::ERROR_REGISTER] = NULL;
+
+    }
+
+
 
 }
 
