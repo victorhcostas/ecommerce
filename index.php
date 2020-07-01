@@ -1,11 +1,11 @@
 <?php 
-session_start();
+session_start(); //Inicio da sessao no site
 
-require_once("vendor/autoload.php");
+require_once("vendor/autoload.php"); //Carrega o autoload do Composer
 
-use \Slim\Slim;
+use \Slim\Slim; //Importa o Slim
 
-$app = new Slim();
+$app = new Slim(); //Instancia um novo Slim Framework
 
 $app->config('debug', true);
 
@@ -19,6 +19,6 @@ require_once("admin-products.php");
 
 
 
-$app->run();
+$app->run(); //Carrega a pagina
 
 ?>
