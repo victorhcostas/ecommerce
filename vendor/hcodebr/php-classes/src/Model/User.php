@@ -13,6 +13,7 @@ class User extends Model {
     const SECRET_IV = "HcodePhp7_Secret_IV";
     const ERROR = "UserError";
     const ERROR_REGISTER = "UserErrorRegister";
+    const SUCCESS = "UserSuccess";
 
     //Verifica se a sessao do usuario ainda esta ativa mesmo se ele sair so site
     public static function getFromSession() {
@@ -321,7 +322,7 @@ class User extends Model {
     }
 
     //Verifica se o login ja existe
-    public static function checkLoginExist($login) {
+    public static function checkLoginExists($login) {
 
         $sql = new Sql();
 
@@ -364,6 +365,31 @@ class User extends Model {
     public static function clearError() {
 
         $_SESSION[User::ERROR] = NULL;
+
+    }
+
+    //Atribui a mensagem de sucesso a uma variavel
+    public static function setSuccess($msg) {
+
+        $_SESSION[User::SUCCESS] = $msg;
+
+    }
+
+    //Retorna a mensagem de sucesso
+    public static function getSuccess() {
+
+        $msg = (isset($_SESSION[User::SUCCESS]) && $_SESSION[User::SUCCESS]) ? $_SESSION[User::SUCCESS] : '';
+
+        User::clearSuccess();
+
+        return $msg;
+
+    }
+
+    //Limpa a mensagem de sucesso
+    public static function clearSuccess() {
+
+        $_SESSION[User::SUCCESS] = NULL;
 
     }
 
