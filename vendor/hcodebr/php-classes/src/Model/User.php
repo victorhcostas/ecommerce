@@ -418,6 +418,7 @@ class User extends Model {
 
     }
 
+    //Exibe todos os pedidos feitos pelo usuario
     public function getOrders() {
 
         $sql = new Sql();

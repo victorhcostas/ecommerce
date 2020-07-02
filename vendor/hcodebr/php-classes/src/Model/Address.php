@@ -9,6 +9,7 @@ class Address extends Model {
 
     const SESSION_ERROR = "AddressError";
 
+    //Recebe um numero de CEP e utiliza o web service ViaCep para retornar as informacoes de endereco
     public static function getCEP($nrcep) {
 
         $nrcep = str_replace("-", "", $nrcep);
@@ -28,6 +29,7 @@ class Address extends Model {
 
     }
 
+    //Recebe o CEP atraves do getCEP() e carrega as informacoes do endereco
     public function loadFromCEP($nrcep) {
 
         $data = Address::getCEP($nrcep);
@@ -46,6 +48,7 @@ class Address extends Model {
 
     }
 
+    //Salva um endereco no banco de dados
     public function save() {
 
         $sql = new Sql();

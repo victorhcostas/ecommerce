@@ -495,7 +495,7 @@ $app->get("/order/:idorder", function($idorder) { //Exibe a tela das informacoes
 
 });
 
-$app->get("/boleto/:idorder", function($idorder) {
+$app->get("/boleto/:idorder", function($idorder) { //Exibe o boleto da compra
 
 	User::verifyLogin(false);
 
@@ -568,7 +568,7 @@ $app->get("/boleto/:idorder", function($idorder) {
 
 });
 
-$app->get("/profile/orders", function() {
+$app->get("/profile/orders", function() { //Exibe os pedidos do perfil do usuario
 
 	User::verifyLogin(false);
 
@@ -582,7 +582,7 @@ $app->get("/profile/orders", function() {
 
 });
 
-$app->get("/profile/orders/:idorder", function($idorder) {
+$app->get("/profile/orders/:idorder", function($idorder) { //Exibe as informacoes do pedido selecionado
 
 	User::verifyLogin(false);
 
@@ -606,7 +606,7 @@ $app->get("/profile/orders/:idorder", function($idorder) {
 
 });
 
-$app->get("/profile/change-password", function() {
+$app->get("/profile/change-password", function() { //Exibe a tela de mudanca de senha do usuario
 
 	User::verifyLogin(false);
 
@@ -619,7 +619,7 @@ $app->get("/profile/change-password", function() {
 
 });
 
-$app->post("/profile/change-password", function() {
+$app->post("/profile/change-password", function() { //Muda a senha do usuario
 
 	User::verifyLogin(false);
 

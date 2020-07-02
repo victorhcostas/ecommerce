@@ -53,6 +53,7 @@ class Cart extends Model {
 
     }
 
+    //Atribui ao carrinho dessa sessao os produtos da sessao anterior
     public function setToSession() {
 
         $_SESSION[Cart::SESSION] = $this->getValues();

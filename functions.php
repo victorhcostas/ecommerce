@@ -9,6 +9,12 @@ function formatPrice($vlprice) { //Muda o formato do preco para o padrao BR
 
 }
 
+function formatDate($date) { //Formata a data
+
+    return date('d/m/Y', strtotime($date));
+
+}
+
 function checkLogin($inadmin = true) { //Retorna a funcao checkLogin() da classe User
 
     return User::checkLogin($inadmin);
