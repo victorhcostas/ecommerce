@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 01-Jul-2020 às 21:31
+-- Generation Time: 02-Jul-2020 às 21:27
 -- Versão do servidor: 10.1.38-MariaDB
 -- versão do PHP: 7.3.2
 
@@ -263,7 +263,31 @@ INSERT INTO `tb_addresses` (`idaddress`, `idperson`, `desaddress`, `descomplemen
 (9, 15, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:01:03'),
 (10, 15, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:13:27'),
 (11, 21, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:28:02'),
-(12, 21, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:28:49');
+(12, 21, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:28:49'),
+(13, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:08:52'),
+(14, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:10:23'),
+(15, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:11:23'),
+(16, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:16:40'),
+(17, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:21:59'),
+(18, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:22:36'),
+(19, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:27:44'),
+(20, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:28:14'),
+(21, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:28:31'),
+(22, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:30:16'),
+(23, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:31:21'),
+(24, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:35:17'),
+(25, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:36:24'),
+(26, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:44:17'),
+(27, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:47:08'),
+(28, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:50:54'),
+(29, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:52:29'),
+(30, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:55:56'),
+(31, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:58:45'),
+(32, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 12:00:03'),
+(33, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 12:38:36'),
+(34, 1, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 13:30:35'),
+(35, 1, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-02 13:52:44'),
+(36, 16, 'Avenida Bernardo SayÃ£o', 'de 262 a 1282 - lado par', 'GoiÃ¢nia', 'GO', 'Brasil', '74550020', 'Setor Centro Oeste', '2020-07-02 16:42:39');
 
 -- --------------------------------------------------------
 
@@ -291,7 +315,9 @@ INSERT INTO `tb_carts` (`idcart`, `dessessionid`, `iduser`, `deszipcode`, `vlfre
 (3, '5q3sfefta7g8c3e8iq1g9uftia', NULL, '75400480', '0.00', 0, '2020-06-29 17:07:41'),
 (4, 'mot4s34pdbq6mffqdilmvkp89s', NULL, '75400480', '188.40', 8, '2020-06-30 11:21:22'),
 (5, 'g8m37ovp53f7abft25n1ed059u', NULL, '75400480', '223.12', 8, '2020-07-01 10:40:26'),
-(6, 'ehe24292kvor8sl7vpvjoils90', NULL, '74610130', '120.02', 4, '2020-07-01 10:41:38');
+(6, 'ehe24292kvor8sl7vpvjoils90', NULL, '74610130', '120.02', 4, '2020-07-01 10:41:38'),
+(7, '1jc5nf9vqtqo6e1u0qn7ojpife', NULL, '74610130', '129.22', 4, '2020-07-02 11:07:01'),
+(8, 'sl4ih8lv7u6os4j9h54vkql8k6', NULL, '74550020', '75.84', 4, '2020-07-02 12:18:47');
 
 -- --------------------------------------------------------
 
@@ -362,7 +388,17 @@ INSERT INTO `tb_cartsproducts` (`idcartproduct`, `idcart`, `idproduct`, `dtremov
 (48, 5, 3, NULL, '2020-07-01 14:16:02'),
 (49, 5, 1, NULL, '2020-07-01 18:34:35'),
 (50, 6, 1, '2020-07-01 16:23:24', '2020-07-01 19:23:03'),
-(51, 6, 1, NULL, '2020-07-01 19:24:54');
+(51, 6, 1, NULL, '2020-07-01 19:24:54'),
+(52, 7, 3, '2020-07-02 10:29:52', '2020-07-02 11:07:44'),
+(53, 8, 4, '2020-07-02 13:41:31', '2020-07-02 12:18:47'),
+(54, 7, 1, '2020-07-02 10:30:16', '2020-07-02 13:29:59'),
+(55, 7, 9, '2020-07-02 10:51:32', '2020-07-02 13:30:05'),
+(56, 7, 1, NULL, '2020-07-02 13:51:42'),
+(57, 7, 13, NULL, '2020-07-02 13:51:55'),
+(58, 7, 13, NULL, '2020-07-02 13:52:03'),
+(59, 8, 12, '2020-07-02 13:41:52', '2020-07-02 16:41:36'),
+(60, 8, 13, NULL, '2020-07-02 16:41:40'),
+(61, 8, 7, NULL, '2020-07-02 16:41:57');
 
 -- --------------------------------------------------------
 
@@ -402,6 +438,24 @@ CREATE TABLE `tb_orders` (
   `vltotal` decimal(10,2) NOT NULL,
   `dtregister` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `tb_orders`
+--
+
+INSERT INTO `tb_orders` (`idorder`, `idcart`, `iduser`, `idstatus`, `idaddress`, `vltotal`, `dtregister`) VALUES
+(1, 7, 21, 3, 19, '4147.04', '2020-07-02 11:27:44'),
+(2, 7, 21, 1, 20, '4147.04', '2020-07-02 11:28:15'),
+(3, 7, 21, 1, 21, '4147.04', '2020-07-02 11:28:32'),
+(4, 7, 21, 1, 22, '4147.04', '2020-07-02 11:30:17'),
+(5, 7, 21, 1, 24, '4147.04', '2020-07-02 11:35:18'),
+(6, 7, 21, 1, 25, '4147.04', '2020-07-02 11:36:24'),
+(7, 7, 21, 1, 28, '4147.04', '2020-07-02 11:50:54'),
+(8, 7, 21, 1, 29, '4147.04', '2020-07-02 11:52:29'),
+(9, 7, 21, 3, 32, '4147.04', '2020-07-02 12:00:03'),
+(11, 7, 1, 1, 34, '1373.52', '2020-07-02 13:30:36'),
+(12, 7, 1, 1, 35, '4008.25', '2020-07-02 13:52:44'),
+(13, 8, 16, 3, 36, '1441.06', '2020-07-02 16:42:39');
 
 -- --------------------------------------------------------
 
@@ -551,7 +605,7 @@ INSERT INTO `tb_users` (`iduser`, `idperson`, `deslogin`, `despassword`, `inadmi
 (15, 15, 'batata', '$2y$12$dFznpQIM7dQZ32Vh6aMJm.RVP7y7SSPUTtkyJub1QvXKuyou0Gar6', 1, '2020-06-30 15:50:15'),
 (16, 16, 'cao', '$2y$12$H67riK0mwIdVa8zd.IB0hezCsvkTFJS5TgCFHQyp3w9IN/s4E0Xfi', 1, '2020-06-30 16:14:17'),
 (20, 20, 'teste', '$2y$12$PyFREpq4d3Z.3xWSKLHYK.PsePQ2ZoK349Aa/3zL7aJiA3neS9Y/y', 1, '2020-06-30 18:07:19'),
-(21, 21, 'vhcsteste@gmail.com', '$2y$12$INtASCQSvh573chkt./.7uxYYM/bZkm/zUqmSn.3YSyxiVDKnXgTu', 0, '2020-07-01 11:00:31');
+(21, 21, 'vhcsteste@gmail.com', '$2y$12$0UrE.C1DC4jNMXjso8ymFe/D26tluFj.fsU2IcO4aB7GNmtZusf6i', 0, '2020-07-01 11:00:31');
 
 -- --------------------------------------------------------
 
@@ -689,19 +743,19 @@ ALTER TABLE `tb_userspasswordsrecoveries`
 -- AUTO_INCREMENT for table `tb_addresses`
 --
 ALTER TABLE `tb_addresses`
-  MODIFY `idaddress` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `idaddress` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `tb_carts`
 --
 ALTER TABLE `tb_carts`
-  MODIFY `idcart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idcart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `tb_cartsproducts`
 --
 ALTER TABLE `tb_cartsproducts`
-  MODIFY `idcartproduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `idcartproduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `tb_categories`
@@ -713,7 +767,7 @@ ALTER TABLE `tb_categories`
 -- AUTO_INCREMENT for table `tb_orders`
 --
 ALTER TABLE `tb_orders`
-  MODIFY `idorder` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idorder` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tb_ordersstatus`
