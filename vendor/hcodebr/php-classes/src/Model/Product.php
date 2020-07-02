@@ -18,7 +18,8 @@ class Product extends Model {
 
     }
 
-    public static function checkList($list) { //Recebe uma lista de dados e os trata conforme os metodos que queremos
+    //Recebe uma lista de dados e os trata conforme os metodos que queremos
+    public static function checkList($list) { 
 
         foreach($list as &$row) {
 
@@ -112,7 +113,8 @@ class Product extends Model {
 
     }
 
-    public function setPhoto($file) { //Converte uma imagem enviada pelo usuario em jpeg(formato usado na programacao da nossa loja)
+    //Converte uma imagem enviada pelo usuario em jpeg(formato usado na programacao da nossa loja)
+    public function setPhoto($file) { 
 
         //Pega o nome do arquivo e armazena a sua extensao
         $extension = explode(".", $file['name']);

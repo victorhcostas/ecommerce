@@ -112,6 +112,7 @@ class Mailer {
 
     }
 
+    //Envia o e-mail
     public function send() {
 
         return $this->mail->send();

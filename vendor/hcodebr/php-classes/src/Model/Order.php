@@ -11,7 +11,8 @@ class Order extends Model {
 	const SUCCESS = "Order-Success";
 	const ERROR = "Order-Error";
 
-    public function save() { //Salva os dados de um novo pedido no banco de dados
+	//Salva os dados de um novo pedido no banco de dados
+    public function save() { 
 
 		$sql = new Sql();
 
@@ -30,7 +31,8 @@ class Order extends Model {
 
     }
     
-    public function get($idorder) { //Retorna todas as informacoes de um pedido
+	//Retorna todas as informacoes de um pedido
+    public function get($idorder) { 
 
 		$sql = new Sql();
 
@@ -52,7 +54,8 @@ class Order extends Model {
 
 	}
 
-	public static function listAll() { //Lista todos os pedidos salvos na loja
+	//Lista todos os pedidos salvos na loja
+	public static function listAll() { 
 
 		$sql = new Sql();
 
@@ -68,7 +71,8 @@ class Order extends Model {
 
 	}
 
-	public function delete() { //Exclui um pedido da lista
+	//Exclui um pedido da lista
+	public function delete() { 
 
 		$sql = new Sql();
 
@@ -79,7 +83,8 @@ class Order extends Model {
 	}
 	
 	
-	public function getCart():Cart { //Retorna as informacoes do carrinho utilizado no pedido, por meio do seu "idcart"
+	//Retorna as informacoes do carrinho utilizado no pedido, por meio do seu "idcart"
+	public function getCart():Cart { 
 		$cart = new Cart();
 
 		$cart->get((int)$this->getidcart());

@@ -21,7 +21,7 @@ function checkLogin($inadmin = true) { //Retorna a funcao checkLogin() da classe
 
 }
 
-function getUserName() { //Recebe o nome do usuario
+function getUserName() { //Retorna o nome do usuario
 
     $user = User::getFromSession();
 
@@ -29,7 +29,7 @@ function getUserName() { //Recebe o nome do usuario
 
 }
 
-function getCartNrQtd() {
+function getCartNrQtd() { //Retorna a quantidade total de produtos no carrinho
 
     $cart = Cart::getFromSession();
 
@@ -39,7 +39,7 @@ function getCartNrQtd() {
 
 }
 
-function getCartVlSubTotal() {
+function getCartVlSubTotal() { //Retorna o valor total dos produtos do carrinho
 
     $cart = Cart::getFromSession();
 
