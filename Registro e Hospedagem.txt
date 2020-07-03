@@ -1,0 +1,40 @@
+Aula 132 - Registro e Hospedagem
+
+registro.br - Fazer conta nele para fazer o registro de um dominio (é pago!)
+
+Hosgator - Servidor de dominios usado na aula (é pago!)
+
+DNS - Domain Name System
+
+-Quando o dominio é acessado é feita a chamada do servidor DNS (neste caso, Hostgator), que direcionará o acesso aos 
+arquivos do site hospedados neste servidor
+
+Servidores Master e Slave - sao os servidores de hospedagem que receberão as chamadas DNS do seu dominio,
+Master é o principal e o Slave é o servidor reserva para casos haja problemas em acessar o Master
+
+-O SSH é recomendado para a integração com o Git no seu site, para que voce possa importar arquivos do git no seu site
+Deve ser habilitado. O software PuTTY é utilizado para implementar os comandos SSH.
+
+-Os arquivos do site devem ser colocados na pasta "public_html/cgi-bin"
+
+-Inicia-se o repositório Git na pasta e puxa-se o repositório remoto (é necessário ter a chave SSH cadastrada e 
+configurada na conta do repositório)
+
+-Devemos adicionar "%" no acesso remoto do MySQL para permitir o acesso de outros servidores ao nosso dominio enquanto
+o site está em desenvolvimento. Ao lançar o site, retira-se essa permissão
+
+-Cria-se o BD MySQL na ferramenta do servidor cadastrando HOSTNAME(Ip do servidor), USERNAME(login do usuario no servidor),
+PASSWORD(gerado pelo usuario ou pelo servidor) e DBNAME(nome do banco de dados).
+
+-Deve-se atribuir as informações cadastradas às constantes de acesso no arquivo "Sql.php" do site
+
+-Vincula-se o usuario ao banco de dados nas configurações
+
+-Graças ao "%", podemos utilizar o MySQL Workbench para acessarmos o servidor do projeto
+
+-Utiliza-se as funções "Server->export" e "Server->import" do Workbench para exportarmos nosso BD local do projeto
+para um arquivo ".sql", e importarmos o BD para o nosso servidor utilizando o arquivo gerado, podendo assim fazer o 
+"pull" do repositório remoto com os arquivos do projeto e fazer a interação do site com o BD
+
+-Se tudo tiver sido feito corretamente, o site está agora hospedado e on-line. Lembrar de tirar a "%" das configurações
+para evitar acessos de terceiros

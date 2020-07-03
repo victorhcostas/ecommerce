@@ -170,6 +170,7 @@ $app->get("/checkout", function() { //Exibe a pagina do checkout do pedido
 
 	//Limpa os boxes de preenchimento
 	if (!$address->getdesaddress()) $address->setdesaddress('');
+	if (!$address->getdesnumber()) $address->setdesnumber('');
 	if (!$address->getdescomplement()) $address->setdescomplement('');
 	if (!$address->getdesdistrict()) $address->setdesdistrict('');
 	if (!$address->getdescity()) $address->setdescity('');
