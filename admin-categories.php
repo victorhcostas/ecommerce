@@ -5,8 +5,8 @@ use \Hcode\Model\User;
 use \Hcode\Model\Category;
 use \Hcode\Model\Product;
 
-$app->get("/admin/categories", function() { //exibe a lista de categorias de produtos disponiveis
-
+$app->get("/admin/categories", function() { //exibe a lista de categorias de produtos disponiveis 
+											//e faz a busca se uma palavra for enviada
 	User::verifyLogin();
 
 	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
