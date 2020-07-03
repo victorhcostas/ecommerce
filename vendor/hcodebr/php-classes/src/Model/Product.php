@@ -183,7 +183,7 @@ class Product extends Model {
 
     }
 
-    //Especifica o numero de categorias que aparecem numa pagina
+    //Especifica o numero de produtos que aparecem numa pagina
     public static function getPage ($page = 1, $itemsPerPage = 4) {
 
         $start = ($page - 1) * $itemsPerPage;
@@ -206,7 +206,7 @@ class Product extends Model {
 
     }
 
-    //Faz uma busca e especifica o numero de categorias encontrados que aparecem numa pagina
+    //Faz uma busca e especifica o numero de produtos encontrados que aparecem numa pagina
     public static function getPageSearch ($search, $page = 1, $itemsPerPage = 4) {
 
         $start = ($page - 1) * $itemsPerPage;
