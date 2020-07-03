@@ -3,16 +3,43 @@
 use \Hcode\PageAdmin;
 use \Hcode\Model\User;
 
-$app->get("/admin/users", function() { //exibe a pagina do usuario
+$app->get("/admin/users", function() { //exibe a pagina do usuario e faz a busca se uma palavra for enviada
 	
 	User::verifyLogin();
+
+	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
+	$page = (isset($_GET['page'])) ? $_GET['page'] : 1;
 	
-	$users = User::listAll();
+	if ($search != '') {
+
+		$pagination = User::getPageSearch($search, $page);
+
+	} else {
+
+		$pagination = User::getPage($page);
+
+	}
+
+	$pages = [];
+
+	for ($x = 0; $x < $pagination['pages']; $x++) {
+
+		array_push($pages, [
+			'href'=>'/admin/users?' . http_build_query([
+				'page'=>$x+1,
+				'search'=>$search
+			]),
+			'text'=>$x+1
+		]);
+
+	}
 	
 	$page = new PageAdmin();
 	
 	$page->setTpl("users", array(
-		"users"=>$users
+		"users"=>$pagination['data'],
+		"search"=>$search,
+		"pages"=>$pages
 	));
 	
 });
