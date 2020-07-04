@@ -13,7 +13,7 @@ class Mailer {
 
     const USERNAME = "vhcsteste02@gmail.com";
     const PASSWORD = "batata21";
-    const NAME_FROM = "Hcode Store";
+    const NAME_FROM = "Link na Bio Suporte";
 
     private $mail;
 

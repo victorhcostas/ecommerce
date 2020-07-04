@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 02-Jul-2020 às 21:27
+-- Generation Time: 04-Jul-2020 às 15:13
 -- Versão do servidor: 10.1.38-MariaDB
 -- versão do PHP: 7.3.2
 
@@ -26,7 +26,7 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_addresses_save` (`pidaddress` INT(11), `pidperson` INT(11), `pdesaddress` VARCHAR(128), `pdescomplement` VARCHAR(32), `pdescity` VARCHAR(32), `pdesstate` VARCHAR(32), `pdescountry` VARCHAR(32), `pdeszipcode` CHAR(8), `pdesdistrict` VARCHAR(32))  BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_addresses_save` (`pidaddress` INT(11), `pidperson` INT(11), `pdesaddress` VARCHAR(128), `pdesnumber` VARCHAR(16), `pdescomplement` VARCHAR(32), `pdescity` VARCHAR(32), `pdesstate` VARCHAR(32), `pdescountry` VARCHAR(32), `pdeszipcode` CHAR(8), `pdesdistrict` VARCHAR(32))  BEGIN
 
 	IF pidaddress > 0 THEN
 		
@@ -34,6 +34,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_addresses_save` (`pidaddress` IN
         SET
 			idperson = pidperson,
             desaddress = pdesaddress,
+            desnumber = pdesnumber,
             descomplement = pdescomplement,
             descity = pdescity,
             desstate = pdesstate,
@@ -44,8 +45,8 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_addresses_save` (`pidaddress` IN
         
     ELSE
 		
-		INSERT INTO tb_addresses (idperson, desaddress, descomplement, descity, desstate, descountry, deszipcode, desdistrict)
-        VALUES(pidperson, pdesaddress, pdescomplement, pdescity, pdesstate, pdescountry, pdeszipcode, pdesdistrict);
+		INSERT INTO tb_addresses (idperson, desaddress, desnumber, descomplement, descity, desstate, descountry, deszipcode, desdistrict)
+        VALUES(pidperson, pdesaddress, pdesnumber, pdescomplement, pdescity, pdesstate, pdescountry, pdeszipcode, pdesdistrict);
         
         SET pidaddress = LAST_INSERT_ID();
         
@@ -198,15 +199,27 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_usersupdate_save` (`piduser` INT
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_users_delete` (`piduser` INT)  BEGIN
-	
+    
     DECLARE vidperson INT;
     
+    SET FOREIGN_KEY_CHECKS = 0;
+	
 	SELECT idperson INTO vidperson
     FROM tb_users
     WHERE iduser = piduser;
+	
+    DELETE FROM tb_addresses WHERE idperson = vidperson;
+    DELETE FROM tb_addresses WHERE idaddress IN(SELECT idaddress FROM tb_orders WHERE iduser = piduser);
+	DELETE FROM tb_persons WHERE idperson = vidperson;
     
+    DELETE FROM tb_userslogs WHERE iduser = piduser;
+    DELETE FROM tb_userspasswordsrecoveries WHERE iduser = piduser;
+    DELETE FROM tb_orders WHERE iduser = piduser;
+    DELETE FROM tb_cartsproducts WHERE idcart IN(SELECT idcart FROM tb_carts WHERE iduser = piduser);
+    DELETE FROM tb_carts WHERE iduser = piduser;
     DELETE FROM tb_users WHERE iduser = piduser;
-    DELETE FROM tb_persons WHERE idperson = vidperson;
+    
+    SET FOREIGN_KEY_CHECKS = 1;
     
 END$$
 
@@ -238,6 +251,7 @@ CREATE TABLE `tb_addresses` (
   `idaddress` int(11) NOT NULL,
   `idperson` int(11) NOT NULL,
   `desaddress` varchar(128) NOT NULL,
+  `desnumber` varchar(16) NOT NULL,
   `descomplement` varchar(32) DEFAULT NULL,
   `descity` varchar(32) NOT NULL,
   `desstate` varchar(32) NOT NULL,
@@ -251,43 +265,15 @@ CREATE TABLE `tb_addresses` (
 -- Extraindo dados da tabela `tb_addresses`
 --
 
-INSERT INTO `tb_addresses` (`idaddress`, `idperson`, `desaddress`, `descomplement`, `descity`, `desstate`, `descountry`, `deszipcode`, `desdistrict`, `dtregister`) VALUES
-(1, 1, 'Rua OdÃ­lio Olinto de Almeida', 'Ao lado do Cemiterio Velho', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 16:35:56'),
-(2, 1, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:23:01'),
-(3, 1, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:34:57'),
-(4, 21, 'Rua OdÃ­lio Olinto de Almeida', 'Aqui do lado', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:38:41'),
-(5, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:43:35'),
-(6, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:43:57'),
-(7, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:45:45'),
-(8, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-01 18:51:37'),
-(9, 15, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:01:03'),
-(10, 15, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:13:27'),
-(11, 21, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:28:02'),
-(12, 21, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-01 19:28:49'),
-(13, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:08:52'),
-(14, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:10:23'),
-(15, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:11:23'),
-(16, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:16:40'),
-(17, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:21:59'),
-(18, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:22:36'),
-(19, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:27:44'),
-(20, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:28:14'),
-(21, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:28:31'),
-(22, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:30:16'),
-(23, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:31:21'),
-(24, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:35:17'),
-(25, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:36:24'),
-(26, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:44:17'),
-(27, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:47:08'),
-(28, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:50:54'),
-(29, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:52:29'),
-(30, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:55:56'),
-(31, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 11:58:45'),
-(32, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 12:00:03'),
-(33, 21, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 12:38:36'),
-(34, 1, 'Rua OdÃ­lio Olinto de Almeida', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-02 13:30:35'),
-(35, 1, 'Rua 226', '', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-02 13:52:44'),
-(36, 16, 'Avenida Bernardo SayÃ£o', 'de 262 a 1282 - lado par', 'GoiÃ¢nia', 'GO', 'Brasil', '74550020', 'Setor Centro Oeste', '2020-07-02 16:42:39');
+INSERT INTO `tb_addresses` (`idaddress`, `idperson`, `desaddress`, `desnumber`, `descomplement`, `descity`, `desstate`, `descountry`, `deszipcode`, `desdistrict`, `dtregister`) VALUES
+(1, 1, 'Avenida Bernardo SayÃ£o', '262', 'de 262 a 1282 - lado par', 'GoiÃ¢nia', 'GO', 'Brasil', '74550020', 'Setor Centro Oeste', '2020-07-03 16:08:54'),
+(2, 16, 'Rua OdÃ­lio Olinto de Almeida', '', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-03 16:10:32'),
+(3, 21, 'Rua 226', '00', 'Apt 1302', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-03 17:13:23'),
+(4, 21, 'Rua 226', '33', 'Apt. 1302', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-03 17:18:24'),
+(5, 16, 'Avenida Bernardo SayÃ£o', '500', 'de 262 a 1282 - lado par', 'GoiÃ¢nia', 'GO', 'Brasil', '74550020', 'Setor Centro Oeste', '2020-07-03 17:23:51'),
+(6, 16, 'Avenida Bernardo SayÃ£o', '', 'de 262 a 1282 - lado par', 'GoiÃ¢nia', 'GO', 'Brasil', '74550020', 'Setor Centro Oeste', '2020-07-03 18:13:57'),
+(7, 16, 'Avenida Bernardo SayÃ£o', '', 'de 262 a 1282 - lado par', 'GoiÃ¢nia', 'GO', 'Brasil', '74550020', 'Setor Centro Oeste', '2020-07-03 18:14:27'),
+(8, 22, 'Rua GoiÃ¡s', '1', 'qd 1 lt 4', 'Inhumas', 'GO', 'Brasil', '75403568', 'Vila Lucimar', '2020-07-03 19:02:01');
 
 -- --------------------------------------------------------
 
@@ -317,7 +303,11 @@ INSERT INTO `tb_carts` (`idcart`, `dessessionid`, `iduser`, `deszipcode`, `vlfre
 (5, 'g8m37ovp53f7abft25n1ed059u', NULL, '75400480', '223.12', 8, '2020-07-01 10:40:26'),
 (6, 'ehe24292kvor8sl7vpvjoils90', NULL, '74610130', '120.02', 4, '2020-07-01 10:41:38'),
 (7, '1jc5nf9vqtqo6e1u0qn7ojpife', NULL, '74610130', '129.22', 4, '2020-07-02 11:07:01'),
-(8, 'sl4ih8lv7u6os4j9h54vkql8k6', NULL, '74550020', '75.84', 4, '2020-07-02 12:18:47');
+(8, 'sl4ih8lv7u6os4j9h54vkql8k6', NULL, '74550020', '75.84', 4, '2020-07-02 12:18:47'),
+(9, 'vkh52ip4krsf9s79a6n6pfgmrg', 1, '74610130', '108.20', 4, '2020-07-03 16:07:40'),
+(10, '28j388rfhv744i3o03cah19qp3', NULL, '74550020', '125.39', 4, '2020-07-03 17:22:48'),
+(11, 'h1817d0kficasph7p9fmsa1uu0', NULL, '75403568', '147.04', 8, '2020-07-03 19:00:08'),
+(12, 'vcmeosgcog2se9ph6l92dh8osf', NULL, NULL, NULL, NULL, '2020-07-03 19:02:26');
 
 -- --------------------------------------------------------
 
@@ -398,7 +388,13 @@ INSERT INTO `tb_cartsproducts` (`idcartproduct`, `idcart`, `idproduct`, `dtremov
 (58, 7, 13, NULL, '2020-07-02 13:52:03'),
 (59, 8, 12, '2020-07-02 13:41:52', '2020-07-02 16:41:36'),
 (60, 8, 13, NULL, '2020-07-02 16:41:40'),
-(61, 8, 7, NULL, '2020-07-02 16:41:57');
+(61, 8, 7, NULL, '2020-07-02 16:41:57'),
+(62, 9, 9, NULL, '2020-07-03 16:08:10'),
+(63, 9, 9, NULL, '2020-07-03 16:10:22'),
+(64, 9, 13, NULL, '2020-07-03 17:17:31'),
+(65, 10, 12, NULL, '2020-07-03 17:23:16'),
+(66, 10, 13, NULL, '2020-07-03 17:23:20'),
+(67, 11, 3, NULL, '2020-07-03 19:00:33');
 
 -- --------------------------------------------------------
 
@@ -455,7 +451,15 @@ INSERT INTO `tb_orders` (`idorder`, `idcart`, `iduser`, `idstatus`, `idaddress`,
 (9, 7, 21, 3, 32, '4147.04', '2020-07-02 12:00:03'),
 (11, 7, 1, 1, 34, '1373.52', '2020-07-02 13:30:36'),
 (12, 7, 1, 1, 35, '4008.25', '2020-07-02 13:52:44'),
-(13, 8, 16, 3, 36, '1441.06', '2020-07-02 16:42:39');
+(13, 8, 16, 3, 36, '1441.06', '2020-07-02 16:42:39'),
+(14, 9, 1, 1, 1, '1373.52', '2020-07-03 16:08:55'),
+(15, 9, 16, 1, 2, '2701.60', '2020-07-03 16:10:32'),
+(16, 9, 21, 1, 3, '2701.60', '2020-07-03 17:13:24'),
+(17, 9, 21, 1, 4, '2936.19', '2020-07-03 17:18:25'),
+(18, 10, 16, 1, 5, '3968.13', '2020-07-03 17:23:52'),
+(19, 10, 16, 1, 6, '3968.13', '2020-07-03 18:13:57'),
+(20, 10, 16, 1, 7, '3968.13', '2020-07-03 18:14:28'),
+(21, 11, 22, 1, 8, '4147.04', '2020-07-03 19:02:01');
 
 -- --------------------------------------------------------
 
@@ -505,7 +509,9 @@ INSERT INTO `tb_persons` (`idperson`, `desperson`, `desemail`, `nrphone`, `dtreg
 (15, 'BÃ¢tÃ¡tÃ Ã§Ã£o', 'batata21@gmail.com', 62985784994, '2020-06-30 15:50:15'),
 (16, 'Ã‡Ã£oÃ‡Ã£o', 'cao@auau.com', 62988776655, '2020-06-30 16:14:17'),
 (20, 'teste1', 'teste@hotmail.com', 654321, '2020-06-30 18:07:19'),
-(21, 'Jin', 'vhcsteste@gmail.com', 982828484, '2020-07-01 11:00:31');
+(21, 'Jin', 'vhcsteste@gmail.com', 982828484, '2020-07-01 11:00:31'),
+(22, 'ttales r g s silva', 'ttalessoft@gmail.com', 62986279696, '2020-07-03 19:01:09'),
+(23, 'Next Tecnologia', 'nxttecnologia@gmail.com', 62986279696, '2020-07-03 19:05:07');
 
 -- --------------------------------------------------------
 
@@ -603,9 +609,11 @@ INSERT INTO `tb_users` (`iduser`, `idperson`, `deslogin`, `despassword`, `inadmi
 (13, 13, 'magal', '$2y$12$uSAUGoeYlKcXTNbMrJ0f1uQ3W4ccpvAJdpE8dp3RMs54oAKTr1bVq', 1, '2020-06-24 12:31:01'),
 (14, 14, 'Ttales', '$2y$12$WkMMOeKQWY2LZttNl6DEtuOIW1COdgw8li20pKlkWmHrEp/uDNMtS', 1, '2020-06-24 13:12:14'),
 (15, 15, 'batata', '$2y$12$dFznpQIM7dQZ32Vh6aMJm.RVP7y7SSPUTtkyJub1QvXKuyou0Gar6', 1, '2020-06-30 15:50:15'),
-(16, 16, 'cao', '$2y$12$H67riK0mwIdVa8zd.IB0hezCsvkTFJS5TgCFHQyp3w9IN/s4E0Xfi', 1, '2020-06-30 16:14:17'),
+(16, 16, 'cao', '$2y$12$EiQ2JCspPYI11EczKW1Zn.M61bb738V5k6soI22P59bh2Ofk1Fl56', 1, '2020-06-30 16:14:17'),
 (20, 20, 'teste', '$2y$12$PyFREpq4d3Z.3xWSKLHYK.PsePQ2ZoK349Aa/3zL7aJiA3neS9Y/y', 1, '2020-06-30 18:07:19'),
-(21, 21, 'vhcsteste@gmail.com', '$2y$12$0UrE.C1DC4jNMXjso8ymFe/D26tluFj.fsU2IcO4aB7GNmtZusf6i', 0, '2020-07-01 11:00:31');
+(21, 21, 'vhcsteste@gmail.com', '$2y$12$DgCpD7LroaFP76Wws34Es.L7WyQY.Uvs7mFcMpXNmHGrCdyAmEhJ.', 0, '2020-07-01 11:00:31'),
+(22, 22, 'ttalessoft@gmail.com', '$2y$12$7aqncHF3sAQeTnlLAyM.VuuiabRCYMOOTguTW8NIstn8EzcBAFPhu', 0, '2020-07-03 19:01:09'),
+(23, 23, 'nexttec', '$2y$12$pVVCl7TV2Tay/JRydQ9ca.KplIUtwkzTF009PO5wLqDwtjurLaa0.', 1, '2020-07-03 19:05:07');
 
 -- --------------------------------------------------------
 
@@ -645,7 +653,16 @@ CREATE TABLE `tb_userspasswordsrecoveries` (
 INSERT INTO `tb_userspasswordsrecoveries` (`idrecovery`, `iduser`, `desip`, `dtrecovery`, `dtregister`) VALUES
 (1, 11, '127.0.0.1', '2020-06-24 09:55:09', '2020-06-24 12:54:54'),
 (2, 14, '127.0.0.1', NULL, '2020-06-24 13:13:47'),
-(3, 21, '127.0.0.1', '2020-07-01 08:45:14', '2020-07-01 11:44:25');
+(3, 21, '127.0.0.1', '2020-07-01 08:45:14', '2020-07-01 11:44:25'),
+(4, 23, '127.0.0.1', NULL, '2020-07-03 19:10:26'),
+(5, 21, '127.0.0.1', NULL, '2020-07-04 10:53:06'),
+(6, 21, '127.0.0.1', NULL, '2020-07-04 11:04:12'),
+(7, 21, '127.0.0.1', NULL, '2020-07-04 11:13:04'),
+(8, 21, '127.0.0.1', NULL, '2020-07-04 11:15:36'),
+(9, 21, '127.0.0.1', NULL, '2020-07-04 11:18:52'),
+(10, 21, '127.0.0.1', NULL, '2020-07-04 11:22:34'),
+(11, 21, '127.0.0.1', '2020-07-04 08:27:57', '2020-07-04 11:24:11'),
+(12, 21, '127.0.0.1', '2020-07-04 08:32:27', '2020-07-04 11:32:05');
 
 --
 -- Indexes for dumped tables
@@ -743,19 +760,19 @@ ALTER TABLE `tb_userspasswordsrecoveries`
 -- AUTO_INCREMENT for table `tb_addresses`
 --
 ALTER TABLE `tb_addresses`
-  MODIFY `idaddress` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `idaddress` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `tb_carts`
 --
 ALTER TABLE `tb_carts`
-  MODIFY `idcart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idcart` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `tb_cartsproducts`
 --
 ALTER TABLE `tb_cartsproducts`
-  MODIFY `idcartproduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `idcartproduct` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `tb_categories`
@@ -767,7 +784,7 @@ ALTER TABLE `tb_categories`
 -- AUTO_INCREMENT for table `tb_orders`
 --
 ALTER TABLE `tb_orders`
-  MODIFY `idorder` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `idorder` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `tb_ordersstatus`
@@ -779,7 +796,7 @@ ALTER TABLE `tb_ordersstatus`
 -- AUTO_INCREMENT for table `tb_persons`
 --
 ALTER TABLE `tb_persons`
-  MODIFY `idperson` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `idperson` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `tb_products`
@@ -791,7 +808,7 @@ ALTER TABLE `tb_products`
 -- AUTO_INCREMENT for table `tb_users`
 --
 ALTER TABLE `tb_users`
-  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `iduser` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `tb_userslogs`
@@ -803,7 +820,7 @@ ALTER TABLE `tb_userslogs`
 -- AUTO_INCREMENT for table `tb_userspasswordsrecoveries`
 --
 ALTER TABLE `tb_userspasswordsrecoveries`
-  MODIFY `idrecovery` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idrecovery` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables

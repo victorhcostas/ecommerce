@@ -380,11 +380,11 @@
         </td>
       </tr>
       <tr class="header-background">
-        <td class="header container" align="center">
+        <td class="header container" align="margin-left">
           <div class="content">
             <span class="brand">
               <a href="#">
-                Hcode Store
+                Link na Bio
               </a>
             </span>
           </div>
@@ -424,12 +424,11 @@
                             <center style="color:#ffffff;font-family:sans-serif;font-size:17px;font-weight:bold;">Review Account Settings</center>
                           </v:roundrect>
                         <![endif]--><a href="<?php echo htmlspecialchars( $link, ENT_COMPAT, 'UTF-8', FALSE ); ?>"
-                        style="background-color:#41CC00;background-image:url(https://www.filepicker.io/api/file/N8GiNGsmT6mK6ORk00S7);border:1px solid #407429;border-radius:4px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:17px;font-weight:bold;text-shadow: -1px -1px #47A54B;line-height:38px;text-align:center;text-decoration:none;width:230px;-webkit-text-size-adjust:none;mso-hide:all;">Redefinir Senha</a></div>
+                        style="background-color:#3498db;border:1px solid #2980b9;border-radius:4px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:17px;font-weight:bold;text-shadow: -1px -1px #000000;line-height:38px;text-align:center;text-decoration:none;width:230px;-webkit-text-size-adjust:none;mso-hide:all;">Redefinir Senha</a></div>
                         <table class="body-signature-block">
                           <tr>
                             <td class="body-signature-cell">
-                              <p>Obrigado!</p>
-                              <p class="body-signature"><img src="https://www.filepicker.io/api/file/2R9HpqboTPaB4NyF35xt" alt="Company Name"></p>
+                              <p>Obrigado!<br><br> Next Tecnologia</p>
                             </td>
                           </tr>
                         </table>
@@ -451,7 +450,7 @@
         <td></td>
         <td class="container">
           <div class="content footer-lead">
-            <a href="#"><b>Get in touch</b></a> if you have any questions or feedback
+            <a href="#"><b>Entre em contato</b></a> se tiver dúvidas ou sugestões
           </div>
         </td>
         <td></td>
@@ -462,7 +461,7 @@
         <td></td>
         <td class="container">
           <div class="content">
-            <a href="#">Contact Us</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+            <a href="#">Entre em contato</a>&nbsp;&nbsp;|&nbsp;&nbsp;
             <span class="footer-group">
               <a href="#">Facebook</a>&nbsp;&nbsp;|&nbsp;&nbsp;
               <a href="#">Twitter</a>&nbsp;&nbsp;|&nbsp;&nbsp;
