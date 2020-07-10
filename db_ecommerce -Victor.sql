@@ -12,12 +12,6 @@ SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
 --
 -- Database: `db_ecommerce`
 --
@@ -26,7 +20,7 @@ DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_addresses_save` (`pidaddress` INT(11), `pidperson` INT(11), `pdesaddress` VARCHAR(128), `pdesnumber` VARCHAR(16), `pdescomplement` VARCHAR(32), `pdescity` VARCHAR(32), `pdesstate` VARCHAR(32), `pdescountry` VARCHAR(32), `pdeszipcode` CHAR(8), `pdesdistrict` VARCHAR(32))  BEGIN
+CREATE PROCEDURE `sp_addresses_save` (`pidaddress` INT(11), `pidperson` INT(11), `pdesaddress` VARCHAR(128), `pdesnumber` VARCHAR(16), `pdescomplement` VARCHAR(32), `pdescity` VARCHAR(32), `pdesstate` VARCHAR(32), `pdescountry` VARCHAR(32), `pdeszipcode` CHAR(8), `pdesdistrict` VARCHAR(32))  BEGIN
 
 	IF pidaddress > 0 THEN
 		
@@ -56,7 +50,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_addresses_save` (`pidaddress` IN
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_carts_save` (`pidcart` INT, `pdessessionid` VARCHAR(64), `piduser` INT, `pdeszipcode` CHAR(8), `pvlfreight` DECIMAL(10,2), `pnrdays` INT)  BEGIN
+CREATE PROCEDURE `sp_carts_save` (`pidcart` INT, `pdessessionid` VARCHAR(64), `piduser` INT, `pdeszipcode` CHAR(8), `pvlfreight` DECIMAL(10,2), `pnrdays` INT)  BEGIN
 
     IF pidcart > 0 THEN
         
@@ -82,7 +76,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_carts_save` (`pidcart` INT, `pde
 
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_categories_save` (`pidcategory` INT, `pdescategory` VARCHAR(64))  BEGIN
+CREATE PROCEDURE `sp_categories_save` (`pidcategory` INT, `pdescategory` VARCHAR(64))  BEGIN
 	
 	IF pidcategory > 0 THEN
 		
@@ -102,7 +96,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_categories_save` (`pidcategory` 
     
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_orders_save` (`pidorder` INT, `pidcart` INT(11), `piduser` INT(11), `pidstatus` INT(11), `pidaddress` INT(11), `pvltotal` DECIMAL(10,2))  BEGIN
+CREATE PROCEDURE `sp_orders_save` (`pidorder` INT, `pidcart` INT(11), `piduser` INT(11), `pidstatus` INT(11), `pidaddress` INT(11), `pvltotal` DECIMAL(10,2))  BEGIN
 	
 	IF pidorder > 0 THEN
 		
@@ -134,7 +128,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_orders_save` (`pidorder` INT, `p
     
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_products_save` (`pidproduct` INT(11), `pdesproduct` VARCHAR(64), `pvlprice` DECIMAL(10,2), `pvlwidth` DECIMAL(10,2), `pvlheight` DECIMAL(10,2), `pvllength` DECIMAL(10,2), `pvlweight` DECIMAL(10,2), `pdesurl` VARCHAR(128))  BEGIN
+CREATE PROCEDURE `sp_products_save` (`pidproduct` INT(11), `pdesproduct` VARCHAR(64), `pvlprice` DECIMAL(10,2), `pvlwidth` DECIMAL(10,2), `pvlheight` DECIMAL(10,2), `pvllength` DECIMAL(10,2), `pvlweight` DECIMAL(10,2), `pdesurl` VARCHAR(128))  BEGIN
 	
 	IF pidproduct > 0 THEN
 		
@@ -162,7 +156,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_products_save` (`pidproduct` INT
     
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_userspasswordsrecoveries_create` (`piduser` INT, `pdesip` VARCHAR(45))  BEGIN
+CREATE PROCEDURE `sp_userspasswordsrecoveries_create` (`piduser` INT, `pdesip` VARCHAR(45))  BEGIN
 	
 	INSERT INTO tb_userspasswordsrecoveries (iduser, desip)
     VALUES(piduser, pdesip);
@@ -172,7 +166,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_userspasswordsrecoveries_create`
     
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_usersupdate_save` (`piduser` INT, `pdesperson` VARCHAR(64), `pdeslogin` VARCHAR(64), `pdespassword` VARCHAR(256), `pdesemail` VARCHAR(128), `pnrphone` BIGINT, `pinadmin` TINYINT)  BEGIN
+CREATE PROCEDURE `sp_usersupdate_save` (`piduser` INT, `pdesperson` VARCHAR(64), `pdeslogin` VARCHAR(64), `pdespassword` VARCHAR(256), `pdesemail` VARCHAR(128), `pnrphone` BIGINT, `pinadmin` TINYINT)  BEGIN
 	
     DECLARE vidperson INT;
     
@@ -198,7 +192,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_usersupdate_save` (`piduser` INT
     
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_users_delete` (`piduser` INT)  BEGIN
+CREATE PROCEDURE `sp_users_delete` (`piduser` INT)  BEGIN
     
     DECLARE vidperson INT;
     
@@ -223,7 +217,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_users_delete` (`piduser` INT)  B
     
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_users_save` (`pdesperson` VARCHAR(64), `pdeslogin` VARCHAR(64), `pdespassword` VARCHAR(256), `pdesemail` VARCHAR(128), `pnrphone` BIGINT, `pinadmin` TINYINT)  BEGIN
+CREATE PROCEDURE `sp_users_save` (`pdesperson` VARCHAR(64), `pdeslogin` VARCHAR(64), `pdespassword` VARCHAR(256), `pdesemail` VARCHAR(128), `pnrphone` BIGINT, `pinadmin` TINYINT)  BEGIN
 	
     DECLARE vidperson INT;
     
@@ -265,15 +259,6 @@ CREATE TABLE `tb_addresses` (
 -- Extraindo dados da tabela `tb_addresses`
 --
 
-INSERT INTO `tb_addresses` (`idaddress`, `idperson`, `desaddress`, `desnumber`, `descomplement`, `descity`, `desstate`, `descountry`, `deszipcode`, `desdistrict`, `dtregister`) VALUES
-(1, 1, 'Avenida Bernardo SayÃ£o', '262', 'de 262 a 1282 - lado par', 'GoiÃ¢nia', 'GO', 'Brasil', '74550020', 'Setor Centro Oeste', '2020-07-03 16:08:54'),
-(2, 16, 'Rua OdÃ­lio Olinto de Almeida', '', '', 'Inhumas', 'GO', 'Brasil', '75400480', 'Centro', '2020-07-03 16:10:32'),
-(3, 21, 'Rua 226', '00', 'Apt 1302', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-03 17:13:23'),
-(4, 21, 'Rua 226', '33', 'Apt. 1302', 'GoiÃ¢nia', 'GO', 'Brasil', '74610130', 'Setor Leste UniversitÃ¡rio', '2020-07-03 17:18:24'),
-(5, 16, 'Avenida Bernardo SayÃ£o', '500', 'de 262 a 1282 - lado par', 'GoiÃ¢nia', 'GO', 'Brasil', '74550020', 'Setor Centro Oeste', '2020-07-03 17:23:51'),
-(6, 16, 'Avenida Bernardo SayÃ£o', '', 'de 262 a 1282 - lado par', 'GoiÃ¢nia', 'GO', 'Brasil', '74550020', 'Setor Centro Oeste', '2020-07-03 18:13:57'),
-(7, 16, 'Avenida Bernardo SayÃ£o', '', 'de 262 a 1282 - lado par', 'GoiÃ¢nia', 'GO', 'Brasil', '74550020', 'Setor Centro Oeste', '2020-07-03 18:14:27'),
-(8, 22, 'Rua GoiÃ¡s', '1', 'qd 1 lt 4', 'Inhumas', 'GO', 'Brasil', '75403568', 'Vila Lucimar', '2020-07-03 19:02:01');
 
 -- --------------------------------------------------------
 
@@ -291,25 +276,6 @@ CREATE TABLE `tb_carts` (
   `dtregister` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Extraindo dados da tabela `tb_carts`
---
-
-INSERT INTO `tb_carts` (`idcart`, `dessessionid`, `iduser`, `deszipcode`, `vlfreight`, `nrdays`, `dtregister`) VALUES
-(1, 'tttb1h64728lrp3en0h53j6946', 1, NULL, NULL, NULL, '2020-06-27 13:44:41'),
-(2, 'vg7bmtfc3ke7c97jmr6ea9cpl6', NULL, '75400480', '120.02', 8, '2020-06-29 11:04:54'),
-(3, '5q3sfefta7g8c3e8iq1g9uftia', NULL, '75400480', '0.00', 0, '2020-06-29 17:07:41'),
-(4, 'mot4s34pdbq6mffqdilmvkp89s', NULL, '75400480', '188.40', 8, '2020-06-30 11:21:22'),
-(5, 'g8m37ovp53f7abft25n1ed059u', NULL, '75400480', '223.12', 8, '2020-07-01 10:40:26'),
-(6, 'ehe24292kvor8sl7vpvjoils90', NULL, '74610130', '120.02', 4, '2020-07-01 10:41:38'),
-(7, '1jc5nf9vqtqo6e1u0qn7ojpife', NULL, '74610130', '129.22', 4, '2020-07-02 11:07:01'),
-(8, 'sl4ih8lv7u6os4j9h54vkql8k6', NULL, '74550020', '75.84', 4, '2020-07-02 12:18:47'),
-(9, 'vkh52ip4krsf9s79a6n6pfgmrg', 1, '74610130', '108.20', 4, '2020-07-03 16:07:40'),
-(10, '28j388rfhv744i3o03cah19qp3', NULL, '74550020', '125.39', 4, '2020-07-03 17:22:48'),
-(11, 'h1817d0kficasph7p9fmsa1uu0', NULL, '75403568', '147.04', 8, '2020-07-03 19:00:08'),
-(12, 'vcmeosgcog2se9ph6l92dh8osf', NULL, NULL, NULL, NULL, '2020-07-03 19:02:26');
-
--- --------------------------------------------------------
 
 --
 -- Estrutura da tabela `tb_cartsproducts`
@@ -322,81 +288,6 @@ CREATE TABLE `tb_cartsproducts` (
   `dtremoved` datetime DEFAULT NULL,
   `dtregister` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Extraindo dados da tabela `tb_cartsproducts`
---
-
-INSERT INTO `tb_cartsproducts` (`idcartproduct`, `idcart`, `idproduct`, `dtremoved`, `dtregister`) VALUES
-(1, 2, 1, '2020-06-29 13:24:00', '2020-06-29 16:20:52'),
-(2, 2, 1, '2020-06-29 14:11:38', '2020-06-29 16:24:09'),
-(3, 2, 2, '2020-06-29 13:25:07', '2020-06-29 16:24:50'),
-(4, 2, 3, '2020-06-29 13:25:51', '2020-06-29 16:25:16'),
-(5, 2, 3, '2020-06-29 13:25:51', '2020-06-29 16:25:20'),
-(6, 3, 1, '2020-06-29 15:07:08', '2020-06-29 17:07:54'),
-(7, 2, 1, '2020-06-29 15:43:56', '2020-06-29 18:06:44'),
-(8, 2, 1, '2020-06-29 16:28:44', '2020-06-29 18:40:54'),
-(9, 2, 1, '2020-06-29 16:28:44', '2020-06-29 18:43:31'),
-(10, 3, 4, '2020-06-29 15:45:28', '2020-06-29 18:44:36'),
-(11, 3, 4, '2020-06-29 15:45:30', '2020-06-29 18:44:56'),
-(12, 3, 3, '2020-06-29 15:47:08', '2020-06-29 18:45:38'),
-(13, 3, 1, '2020-06-29 15:47:55', '2020-06-29 18:47:12'),
-(14, 3, 1, '2020-06-29 15:47:55', '2020-06-29 18:47:20'),
-(15, 3, 2, '2020-06-29 15:48:13', '2020-06-29 18:47:52'),
-(16, 3, 13, '2020-06-29 16:07:20', '2020-06-29 18:48:11'),
-(17, 3, 1, '2020-06-29 15:55:26', '2020-06-29 18:48:26'),
-(18, 3, 1, '2020-06-29 15:58:26', '2020-06-29 18:48:40'),
-(19, 3, 1, '2020-06-29 15:58:51', '2020-06-29 18:58:21'),
-(20, 3, 1, '2020-06-29 16:07:19', '2020-06-29 18:58:49'),
-(21, 3, 1, '2020-06-29 16:07:19', '2020-06-29 19:03:05'),
-(22, 3, 1, '2020-06-29 16:11:29', '2020-06-29 19:10:21'),
-(23, 3, 1, '2020-06-29 16:21:59', '2020-06-29 19:11:03'),
-(24, 3, 1, '2020-06-29 16:23:06', '2020-06-29 19:21:50'),
-(25, 3, 1, '2020-06-29 16:23:06', '2020-06-29 19:22:01'),
-(26, 3, 1, '2020-06-29 16:23:06', '2020-06-29 19:22:03'),
-(27, 3, 3, '2020-06-29 16:24:14', '2020-06-29 19:23:32'),
-(28, 3, 1, '2020-06-29 16:26:07', '2020-06-29 19:24:18'),
-(29, 3, 13, '2020-06-29 16:26:09', '2020-06-29 19:25:25'),
-(30, 3, 12, '2020-06-29 16:26:11', '2020-06-29 19:25:29'),
-(31, 3, 9, '2020-06-29 16:26:13', '2020-06-29 19:25:37'),
-(32, 3, 2, '2020-06-29 16:28:24', '2020-06-29 19:25:44'),
-(33, 3, 2, NULL, '2020-06-29 19:28:33'),
-(34, 2, 2, '2020-06-29 16:29:02', '2020-06-29 19:28:48'),
-(35, 2, 2, '2020-06-29 16:29:02', '2020-06-29 19:28:59'),
-(36, 2, 7, '2020-06-29 16:30:18', '2020-06-29 19:29:05'),
-(37, 2, 2, '2020-06-29 16:31:58', '2020-06-29 19:30:23'),
-(38, 2, 2, '2020-06-29 16:33:06', '2020-06-29 19:31:45'),
-(39, 2, 2, '2020-06-29 16:33:06', '2020-06-29 19:32:55'),
-(40, 2, 1, NULL, '2020-06-29 19:33:11'),
-(41, 4, 1, NULL, '2020-06-30 11:23:03'),
-(42, 4, 1, NULL, '2020-06-30 11:23:14'),
-(43, 5, 1, '2020-07-01 11:15:17', '2020-07-01 10:43:10'),
-(44, 6, 1, '2020-07-01 16:22:42', '2020-07-01 10:45:57'),
-(45, 6, 1, '2020-07-01 16:22:42', '2020-07-01 10:53:22'),
-(46, 5, 1, '2020-07-01 15:34:39', '2020-07-01 14:03:36'),
-(47, 5, 3, '2020-07-01 11:16:22', '2020-07-01 14:13:32'),
-(48, 5, 3, NULL, '2020-07-01 14:16:02'),
-(49, 5, 1, NULL, '2020-07-01 18:34:35'),
-(50, 6, 1, '2020-07-01 16:23:24', '2020-07-01 19:23:03'),
-(51, 6, 1, NULL, '2020-07-01 19:24:54'),
-(52, 7, 3, '2020-07-02 10:29:52', '2020-07-02 11:07:44'),
-(53, 8, 4, '2020-07-02 13:41:31', '2020-07-02 12:18:47'),
-(54, 7, 1, '2020-07-02 10:30:16', '2020-07-02 13:29:59'),
-(55, 7, 9, '2020-07-02 10:51:32', '2020-07-02 13:30:05'),
-(56, 7, 1, NULL, '2020-07-02 13:51:42'),
-(57, 7, 13, NULL, '2020-07-02 13:51:55'),
-(58, 7, 13, NULL, '2020-07-02 13:52:03'),
-(59, 8, 12, '2020-07-02 13:41:52', '2020-07-02 16:41:36'),
-(60, 8, 13, NULL, '2020-07-02 16:41:40'),
-(61, 8, 7, NULL, '2020-07-02 16:41:57'),
-(62, 9, 9, NULL, '2020-07-03 16:08:10'),
-(63, 9, 9, NULL, '2020-07-03 16:10:22'),
-(64, 9, 13, NULL, '2020-07-03 17:17:31'),
-(65, 10, 12, NULL, '2020-07-03 17:23:16'),
-(66, 10, 13, NULL, '2020-07-03 17:23:20'),
-(67, 11, 3, NULL, '2020-07-03 19:00:33');
-
--- --------------------------------------------------------
 
 --
 -- Estrutura da tabela `tb_categories`
@@ -434,34 +325,6 @@ CREATE TABLE `tb_orders` (
   `vltotal` decimal(10,2) NOT NULL,
   `dtregister` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Extraindo dados da tabela `tb_orders`
---
-
-INSERT INTO `tb_orders` (`idorder`, `idcart`, `iduser`, `idstatus`, `idaddress`, `vltotal`, `dtregister`) VALUES
-(1, 7, 21, 3, 19, '4147.04', '2020-07-02 11:27:44'),
-(2, 7, 21, 1, 20, '4147.04', '2020-07-02 11:28:15'),
-(3, 7, 21, 1, 21, '4147.04', '2020-07-02 11:28:32'),
-(4, 7, 21, 1, 22, '4147.04', '2020-07-02 11:30:17'),
-(5, 7, 21, 1, 24, '4147.04', '2020-07-02 11:35:18'),
-(6, 7, 21, 1, 25, '4147.04', '2020-07-02 11:36:24'),
-(7, 7, 21, 1, 28, '4147.04', '2020-07-02 11:50:54'),
-(8, 7, 21, 1, 29, '4147.04', '2020-07-02 11:52:29'),
-(9, 7, 21, 3, 32, '4147.04', '2020-07-02 12:00:03'),
-(11, 7, 1, 1, 34, '1373.52', '2020-07-02 13:30:36'),
-(12, 7, 1, 1, 35, '4008.25', '2020-07-02 13:52:44'),
-(13, 8, 16, 3, 36, '1441.06', '2020-07-02 16:42:39'),
-(14, 9, 1, 1, 1, '1373.52', '2020-07-03 16:08:55'),
-(15, 9, 16, 1, 2, '2701.60', '2020-07-03 16:10:32'),
-(16, 9, 21, 1, 3, '2701.60', '2020-07-03 17:13:24'),
-(17, 9, 21, 1, 4, '2936.19', '2020-07-03 17:18:25'),
-(18, 10, 16, 1, 5, '3968.13', '2020-07-03 17:23:52'),
-(19, 10, 16, 1, 6, '3968.13', '2020-07-03 18:13:57'),
-(20, 10, 16, 1, 7, '3968.13', '2020-07-03 18:14:28'),
-(21, 11, 22, 1, 8, '4147.04', '2020-07-03 19:02:01');
-
--- --------------------------------------------------------
 
 --
 -- Estrutura da tabela `tb_ordersstatus`
@@ -503,17 +366,9 @@ CREATE TABLE `tb_persons` (
 
 INSERT INTO `tb_persons` (`idperson`, `desperson`, `desemail`, `nrphone`, `dtregister`) VALUES
 (1, 'JoÃ£o Rangel', 'admin@hcode.com.br', 2147483647, '2017-03-01 03:00:00'),
-(11, 'Vitao Teste', 'vhcsteste02@gmail.com', 62988997766, '2020-06-23 12:45:40'),
-(13, 'Lucas Sidnei', 'nerosidnei@gmail.com', 62984887443, '2020-06-24 12:31:01'),
-(14, 'Ttales', 'ttalessoft@gmail.com', 62985881122, '2020-06-24 13:12:14'),
 (15, 'BÃ¢tÃ¡tÃ Ã§Ã£o', 'batata21@gmail.com', 62985784994, '2020-06-30 15:50:15'),
 (16, 'Ã‡Ã£oÃ‡Ã£o', 'cao@auau.com', 62988776655, '2020-06-30 16:14:17'),
-(20, 'teste1', 'teste@hotmail.com', 654321, '2020-06-30 18:07:19'),
-(21, 'Jin', 'vhcsteste@gmail.com', 982828484, '2020-07-01 11:00:31'),
-(22, 'ttales r g s silva', 'ttalessoft@gmail.com', 62986279696, '2020-07-03 19:01:09'),
-(23, 'Next Tecnologia', 'nxttecnologia@gmail.com', 62986279696, '2020-07-03 19:05:07');
-
--- --------------------------------------------------------
+(20, 'teste1', 'teste@hotmail.com', 654321, '2020-06-30 18:07:19');
 
 --
 -- Estrutura da tabela `tb_products`
@@ -605,15 +460,9 @@ CREATE TABLE `tb_users` (
 
 INSERT INTO `tb_users` (`iduser`, `idperson`, `deslogin`, `despassword`, `inadmin`, `dtregister`) VALUES
 (1, 1, 'admin', '$2y$12$YlooCyNvyTji8bPRcrfNfOKnVMmZA9ViM2A3IpFjmrpIbp5ovNmga', 1, '2017-03-13 03:00:00'),
-(11, 11, 'vhcsteste', '$2y$12$jbrr6HZgLIW5dDZNIL2XaOAFXcCQRwKW40YFdnb78M27L9DoAax8O', 1, '2020-06-23 12:45:40'),
-(13, 13, 'magal', '$2y$12$uSAUGoeYlKcXTNbMrJ0f1uQ3W4ccpvAJdpE8dp3RMs54oAKTr1bVq', 1, '2020-06-24 12:31:01'),
-(14, 14, 'Ttales', '$2y$12$WkMMOeKQWY2LZttNl6DEtuOIW1COdgw8li20pKlkWmHrEp/uDNMtS', 1, '2020-06-24 13:12:14'),
 (15, 15, 'batata', '$2y$12$dFznpQIM7dQZ32Vh6aMJm.RVP7y7SSPUTtkyJub1QvXKuyou0Gar6', 1, '2020-06-30 15:50:15'),
 (16, 16, 'cao', '$2y$12$EiQ2JCspPYI11EczKW1Zn.M61bb738V5k6soI22P59bh2Ofk1Fl56', 1, '2020-06-30 16:14:17'),
-(20, 20, 'teste', '$2y$12$PyFREpq4d3Z.3xWSKLHYK.PsePQ2ZoK349Aa/3zL7aJiA3neS9Y/y', 1, '2020-06-30 18:07:19'),
-(21, 21, 'vhcsteste@gmail.com', '$2y$12$DgCpD7LroaFP76Wws34Es.L7WyQY.Uvs7mFcMpXNmHGrCdyAmEhJ.', 0, '2020-07-01 11:00:31'),
-(22, 22, 'ttalessoft@gmail.com', '$2y$12$7aqncHF3sAQeTnlLAyM.VuuiabRCYMOOTguTW8NIstn8EzcBAFPhu', 0, '2020-07-03 19:01:09'),
-(23, 23, 'nexttec', '$2y$12$pVVCl7TV2Tay/JRydQ9ca.KplIUtwkzTF009PO5wLqDwtjurLaa0.', 1, '2020-07-03 19:05:07');
+(20, 20, 'teste', '$2y$12$PyFREpq4d3Z.3xWSKLHYK.PsePQ2ZoK349Aa/3zL7aJiA3neS9Y/y', 1, '2020-06-30 18:07:19');
 
 -- --------------------------------------------------------
 
@@ -880,6 +729,3 @@ ALTER TABLE `tb_userspasswordsrecoveries`
   ADD CONSTRAINT `fk_userspasswordsrecoveries_users` FOREIGN KEY (`iduser`) REFERENCES `tb_users` (`iduser`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
