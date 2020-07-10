@@ -10,7 +10,7 @@ Template usado no projeto [Almsaeed Studio](https://almsaeedstudio.com)
 127.0.0.1		www.hcodecommerce.com.br
 
 <VirtualHost *:80>
-    ServerAdmin victor99costa@outlook.com
+    ServerAdmin example@gmail.com
     DocumentRoot "C:/ecommerce"
     ServerName www.hcodecommerce.com.br
     ErrorLog "logs/dummy-host2.example.com-error.log"

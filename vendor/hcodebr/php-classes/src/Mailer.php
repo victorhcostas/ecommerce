@@ -11,9 +11,9 @@ require 'vendor/autoload.php';
 
 class Mailer {
 
-    const USERNAME = "vhcsteste02@gmail.com";
-    const PASSWORD = "batata21";
-    const NAME_FROM = "Link na Bio Suporte";
+    const USERNAME = "example@gmail.com";
+    const PASSWORD = "password";
+    const NAME_FROM = "Hcode Store";
 
     private $mail;
 
